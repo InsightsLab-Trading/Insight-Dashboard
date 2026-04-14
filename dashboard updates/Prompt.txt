@@ -1,0 +1,83 @@
+Run an analysis using the given data, then update the dashboard's data file.
+
+I am attaching 4 screenshots and two files:
+  • index.html  — the static template (DO NOT modify this file under any circumstances)
+  • data.js     — the ONLY file you update
+
+The 4 screenshots are a market-monitoring workspace suite showing:
+  1. A CFTC-style Nasdaq Mini futures COT positioning report
+  2. A stock market sector heatmap
+  3. An index performance panel with major US indices, global markets, crypto, FX, and commodities
+  4. A multi-timeframe chart layout for ENQM26 with candlesticks, EMAs, RSI, volume/profile overlays, and marked price levels
+
+===== DASHBOARD UPDATE INSTRUCTIONS =====
+
+Your ONLY job is to update data.js. Do not output, modify, or reference index.html.
+
+------- CORE DATA RULES -------
+
+1. Keep the exact MARKET_DATA object structure and all field names — do not rename, remove, or reorder any keys
+2. Replace every value with current session data extracted from the screenshots
+3. Update: meta.date, meta.generated, meta.instrument, meta.symbol
+4. timeUpdated.timestamp → exact time/date of this analysis (e.g. "April 14, 2026 · 9:45 AM ET")
+   timeUpdated.analyst   → session label (e.g. "Pre-Market Analysis" or "Intraday Update")
+   timeUpdated.note      → brief status note (e.g. "Next update: EOD" or "Live session")
+5. alert.show: true/false — set true for significant alerts only; update alert.text accordingly
+6. For timeframes: include all rows that apply per timeframe; add/remove rows[] entries as needed
+7. For sectors: barWidth is 0–100 relative (100 = best-performing sector that day, regardless of sign)
+8. For movers heatmap: include the 5 most notable tickers (mix of up/down)
+9. Keep all CSS class names unchanged: "up", "down", "neutral", "signal-bull", "signal-bear", "signal-warn", "signal-neut"
+
+------- NEW SECTIONS (fill every session) -------
+
+10. INSIGHT METER — insightMeter.score: integer 1–100
+    · 1–44 = bearish (eye and arc turn red; pupil slides left)
+    · 45–55 = neutral (grey)
+    · 56–100 = bullish (eye and arc turn green; pupil slides right)
+    · Synthesize ALL data: technicals, COT, breadth, news, macro into one holistic score
+    · insightMeter.label: short verdict (e.g. "Strongly Bullish", "Cautious", "Neutral")
+    · insightMeter.sublabel: one-line context (e.g. "All TFs aligned · VIX contracting · COT bullish")
+
+11. NEWS ANALYSIS — newsAnalysis (populate from Grok's structured response, paste directly):
+    · sentimentScore: 0–100 (from Grok's "NQ Intraday News-Sentiment Score")
+    · confidenceScore: 0–100 (from Grok's "Confidence Score")
+    · volatilityRisk: 0–100 (from Grok's "Volatility Risk Score")
+    · directionalBias: "Bullish" | "Bearish" | "Neutral" (from Grok's "Directional Bias From News")
+    · sessionCharacter: short phrase describing the likely session character
+    · summary: Grok's overall summary paragraph
+    · xSentiment.overview: Grok's X/social sentiment overview
+    · xSentiment.bullets[]: 3–5 key X sentiment bullets
+    · macro.overview: Grok's Forex Factory / macro overview
+    · macro.bullets[]: 3–5 key macro event bullets
+    · crossMarket: Grok's cross-market interpretation paragraph
+    · confirms[]: 3–5 things that confirm the bias
+    · weakens[]: 3–5 things that weaken the bias
+    · keyDrivers[]: 4–6 key driver bullets from Grok
+    · scoreRationale: Grok's score rationale paragraph
+
+12. POSSIBLE PLAYBOOKS — playbooks (minimum 2 setups per session):
+    · context: 1–2 sentence current market context framing which setups are active
+    · setups[0] and setups[1]: at minimum — add more if warranted
+    · Each setup must include:
+      - name: descriptive setup name (e.g. "Month High Continuation Long")
+      - direction: "long" | "short" | "neutral"
+      - concept: the orderflow concept (e.g. "Auction Continuation", "Failed Auction", "Value Area Re-entry", "Imbalance Fill", "Stop Hunt Reversal", "Opening Drive")
+      - description: 3–5 sentence detailed explanation of WHY this setup makes sense given current orderflow, what the institutional logic is, where absorption or aggression is expected, and what makes it valid vs invalid
+      - details[]: array of { key, val, cls } rows covering:
+          Trigger / Entry Zone / Confirmation / Target 1 / Target 2 / Stop / Invalidation / Risk/Reward
+      - For each setup, cls: "up" for bullish levels, "down" for stop/risk levels, "" for neutral
+
+13. INSIGHT'S PLAN — insightPlan:
+    · title: the session's primary strategic headline (e.g. "Breakout Continuation with Defined Mean-Reversion Risk")
+    · verdict: "Bullish Bias" | "Bearish Bias" | "Cautious Bullish" | "Cautious Bearish" | "Neutral / Wait"
+    · overview: 2–4 sentences summarizing the overall plan, primary edge, and risk posture
+    · scenarios[]: 3–5 IF/THEN condition → action pairs covering the main market scenarios
+    · execution[]: 3–5 ordered steps for how to approach the session from open to close
+    · invalidations[]: 3 key things that would kill or fundamentally alter the plan
+
+------- OUTPUT -------
+
+Output the complete, updated data.js file — no abbreviations, no truncations, no omissions.
+Do not output index.html.
+Do not include any explanation before or after the file.
+Start your response with: // ============================================================
