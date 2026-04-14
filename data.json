@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": "1.2",
+    "version": "2.0",
     "generated_at": null,
     "chart_image": "./assets/chart.png"
   },
@@ -10,38 +10,27 @@
   "time_cst": null,
   "session": null,
   "current_price": null,
-  "ema_stack": [],
-  "rsi": [],
-  "volatility": {
-    "atr_15m": null,
-    "atr_percentile": null,
-    "atr_state": null
-  },
   "regime": {
     "name": null,
     "confidence": null,
     "reasoning": null
   },
-  "fideo": {
-    "day_type": null,
-    "overnight_range": null,
-    "economic_event": null,
-    "ib_breakout_watch": null,
-    "playbook_note": null
+  "ema_stack": [],
+  "rsi": [],
+  "volatility": {
+    "atr_15m": null,
+    "atr_state": null,
+    "squeeze": false
   },
-  "bt_signals": [],
   "vwap": {
     "price": null,
     "price_vs_vwap": null,
-    "ma9_vs_vwap": null,
     "signal": null
   },
   "volume_profile": {
     "poc": null,
     "vah": null,
     "val": null,
-    "hvn_zones": [],
-    "lvn_zones": [],
     "price_in_profile": null
   },
   "levels": {
@@ -52,46 +41,17 @@
     "onl": null,
     "weekly_high": null,
     "weekly_low": null,
-    "monthly_high": null,
-    "monthly_low": null,
     "round_above": null,
-    "round_below": null
+    "round_below": null,
+    "sasuke_above": null,
+    "sasuke_above_label": null,
+    "sasuke_pts_above": null,
+    "sasuke_below": null,
+    "sasuke_below_label": null,
+    "sasuke_pts_below": null
   },
-  "sasuke": {
-    "yearly_nq": 26761,
-    "semi_annual_nq": 23375,
-    "quarterly_nq": 25472,
-    "monthly_nq": 19893,
-    "weekly_nq": 20184,
-    "nearest_above": null,
-    "nearest_above_label": null,
-    "pts_above": null,
-    "nearest_below": null,
-    "nearest_below_label": null,
-    "pts_below": null,
-    "cluster_zone": null,
-    "active_note": null
-  },
-  "fvgs": [],
-  "liquidity": {
-    "t1_pools": null,
-    "t2_pools": null,
-    "sweep_watch": null,
-    "dominant_side": null
-  },
+  "bt_signals": [],
   "narrative": null,
-  "dominant_player_action": null,
-  "intraday_context": null,
-  "risk": {
-    "equity": null,
-    "dd_floor": null,
-    "max_risk_per_trade": null,
-    "current_time_cst": null,
-    "session_window": null,
-    "losing_streak": null,
-    "size_adjustment": null,
-    "rsi_4h_flag": null
-  },
   "scenarios": {
     "bull_probability": null,
     "bear_probability": null,
@@ -113,44 +73,9 @@
     "overall": null,
     "decision": null
   },
-  "playbooks": {
-    "stddev": {
-      "is_active": null,
-      "zone": null,
-      "signal": null,
-      "target": null,
-      "note": null
-    },
-    "wyckoff": {
-      "is_active": null,
-      "phase": null,
-      "structure": null,
-      "fib_entry": null,
-      "extension_target": null,
-      "note": null
-    },
-    "brendan": {
-      "is_active": null,
-      "ma9_vs_vwap": null,
-      "gap_width": null,
-      "gc_nq_primary": null,
-      "correlation_signal": null,
-      "note": null
-    },
-    "power_hour": {
-      "is_active": null,
-      "status": null,
-      "morning_trend": null,
-      "squeeze_present": null,
-      "setup": null,
-      "entry_bar": null,
-      "note": null
-    }
-  },
-  "supporting": {
-    "vault_refs": null,
-    "active_playbooks": null,
-    "key_confluences": null,
-    "watch_for": null
+  "risk": {
+    "size_adjustment": null,
+    "rsi_4h_flag": null,
+    "session_window": null
   }
 }
