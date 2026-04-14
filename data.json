@@ -23,37 +23,107 @@
     "crypto": "BTC $74,806 +0.48% · ETH $2,343 +0.48% — Risk-on confirmation",
     "note": "Strong broad market rally. Tech sector leading. VIX declining, DXY flat. Gold bid is the one cautionary signal — partial hedge demand. Overall equity tone firmly risk-on but 4H RSI at 76.40 creates a hard NO_LONGS flag despite macro tailwind."
   },
-  "news_summary": "No Grok block provided. Prior session context: CPI came in hot (+0.4% vs +0.3% forecast) — however markets appear to be shrugging off that print, rallying strongly. FOMC minutes still pending at 1:00 PM CST — key risk event approaching in ~2 hours. Maintain caution into midday.",
+  "news_summary": "Softer Core PPI (0.1% vs 0.3% forecast) eases inflation concerns and provides mild support for NQ/tech sentiment. ADP beat (39.3K vs 26K forecast) signals labor resilience, limiting aggressive Fed cut expectations. All FOMC speakers today (Goolsbee x3, Barr, Barkin, Collins) have passed with dovish/mixed tones — no remaining high-impact events today. Low-volatility afternoon expected. Risk tone cautious ahead of tomorrow's Empire State and housing data.",
   "news_events": [
     {
-      "name": "CPI m/m",
+      "name": "NFIB Small Business Index",
+      "currency": "USD",
+      "time": "05:00",
+      "impact": "medium",
+      "forecast": "97.8",
+      "previous": "95.8",
+      "actual": "98.8",
+      "passed": true
+    },
+    {
+      "name": "ADP Employment Change",
+      "currency": "USD",
+      "time": "07:15",
+      "impact": "high",
+      "forecast": "26K",
+      "previous": null,
+      "actual": "39.3K",
+      "passed": true
+    },
+    {
+      "name": "PPI m/m",
+      "currency": "USD",
+      "time": "07:30",
+      "impact": "high",
+      "forecast": "0.5%",
+      "previous": "1.1%",
+      "actual": "0.5%",
+      "passed": true
+    },
+    {
+      "name": "Core PPI m/m",
       "currency": "USD",
       "time": "07:30",
       "impact": "high",
       "forecast": "0.3%",
-      "previous": "0.2%",
-      "actual": "0.4%",
+      "previous": "0.4%",
+      "actual": "0.1%",
       "passed": true
     },
     {
-      "name": "Core CPI m/m",
+      "name": "FOMC Member Goolsbee Speaks",
       "currency": "USD",
-      "time": "07:30",
-      "impact": "high",
-      "forecast": "0.3%",
-      "previous": "0.3%",
-      "actual": "0.4%",
-      "passed": true
-    },
-    {
-      "name": "FOMC Meeting Minutes",
-      "currency": "USD",
-      "time": "13:00",
-      "impact": "high",
+      "time": "08:45",
+      "impact": "medium",
       "forecast": null,
       "previous": null,
       "actual": null,
-      "passed": false
+      "passed": true
+    },
+    {
+      "name": "FOMC Member Goolsbee Speaks",
+      "currency": "USD",
+      "time": "09:15",
+      "impact": "medium",
+      "forecast": null,
+      "previous": null,
+      "actual": null,
+      "passed": true
+    },
+    {
+      "name": "FOMC Member Goolsbee Speaks",
+      "currency": "USD",
+      "time": "11:10",
+      "impact": "medium",
+      "forecast": null,
+      "previous": null,
+      "actual": null,
+      "passed": true
+    },
+    {
+      "name": "FOMC Member Barr Speaks",
+      "currency": "USD",
+      "time": "11:45",
+      "impact": "medium",
+      "forecast": null,
+      "previous": null,
+      "actual": null,
+      "passed": true
+    },
+    {
+      "name": "FOMC Member Barkin Speaks",
+      "currency": "USD",
+      "time": "12:00",
+      "impact": "medium",
+      "forecast": null,
+      "previous": null,
+      "actual": null,
+      "passed": true
+    },
+    {
+      "name": "FOMC Member Collins Speaks",
+      "currency": "USD",
+      "time": "12:00",
+      "impact": "medium",
+      "forecast": null,
+      "previous": null,
+      "actual": null,
+      "passed": true
     }
   ],
   "regime": {
@@ -113,7 +183,7 @@
     { "direction": "Buy",  "size": 150, "level": 25800, "note": "Multiple green circles on 4H push higher — institutional participation on the rally" },
     { "direction": "Sell", "size": 155, "level": 25956, "note": "Red circle visible on 4H near current highs — potential distribution / rejection at weekly high zone" }
   ],
-  "narrative": "Prior thesis was bearish — that has been completely invalidated. Price has ripped +230pts from the prior session analysis level (25,726) and is now printing 25,956 at the weekly high. All 4 timeframes are above EMA9+21. Macro is firmly risk-on — Tech +1.21%, VIX -5.87%, QQQ +1.05%. However, 4H RSI at 76.40 is a hard NO_LONGS flag per system rules. A red BT signal is appearing at the highs. The key question is whether this is a bull trend continuation (price breaks above 26,000 weekly round) or a MEAN_REVERT_OVERBOUGHT exhaustion. System rules say: NO NEW LONGS. Only valid trade is short on BT rejection with macro confirmation — but macro is not confirming a short right now. Best action: WAIT for either (1) price to break 26,000 and RSI reset, or (2) 15m body close back under 25,750 with red BT confirm. FOMC minutes at 1PM CST in ~2 hours is a live risk.",
+  "narrative": "Prior thesis was bearish — that has been completely invalidated. Price has ripped +230pts from the prior session analysis level (25,726) and is now printing 25,956 at the weekly high. All 4 timeframes are above EMA9+21. Macro is firmly risk-on — Tech +1.21%, VIX -5.87%, QQQ +1.05%. News backdrop has improved: Core PPI came in soft (0.1% vs 0.3% forecast), easing inflation fears. All FOMC speakers today have passed with dovish/mixed tone — the news calendar is now CLEAR for the remainder of the session. However, 4H RSI at 76.40 is a hard NO_LONGS flag per system rules, and a red BT signal is appearing at the highs. The key question is whether this is a bull trend continuation (price breaks 26,000) or MEAN_REVERT_OVERBOUGHT exhaustion. No more news risk today — the RSI flag is the sole blocker. WAIT for either (1) 26,000 breakout + RSI reset below 73, or (2) 15m body close below 25,750 + red BT for a short.",
   "scenarios": {
     "bull_probability": 55,
     "bear_probability": 25,
@@ -163,6 +233,6 @@
     "size_adjustment": "NO_TRADE",
     "rsi_4h_flag": "NO_LONGS",
     "session_window": "Morning — but FOMC minutes at 1PM CST and Dead Zone at 12PM CST reduce remaining trade window to ~45 min",
-    "dec_flags": ["NO_LONGS_RSI_4H", "FOMC_MINUTES_PENDING", "WEEKLY_HIGH_RESISTANCE", "PRIOR_THESIS_INVALIDATED"]
+    "dec_flags": ["NO_LONGS_RSI_4H", "WEEKLY_HIGH_RESISTANCE", "PRIOR_THESIS_INVALIDATED", "NEWS_CALENDAR_CLEAR"]
   }
 }
