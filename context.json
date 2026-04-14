@@ -1,15 +1,16 @@
 {
-  "last_updated": "2026-04-14T09:30:00-05:00",
-  "last_regime": "BEAR_TREND_NORMAL_VOL_SELL_DOM",
-  "last_decision": "EXECUTE",
-  "last_price": 25726,
+  "last_updated": "2026-04-14T11:00:00-05:00",
+  "last_regime": "MEAN_REVERT_OVERBOUGHT",
+  "last_decision": "WAIT",
+  "last_price": 25956,
   "watch_list": [
-    "25,726 PDH/ONH — key resistance, rejection confirmed. Watch for failed retest.",
-    "25,561 PDC — first target and support. Body close below flips to 25,472.",
-    "25,472 Quarterly Open — major Sasuke level, expect strong reaction.",
-    "FOMC Minutes 1:00 PM CST — exit all positions by 12:45 CST."
+    "26,000 — Round number + psychological resistance. Body close ABOVE → upgrade to BULL_TREND, longs valid on RSI reset.",
+    "25,956 — Weekly High / current level. Red BT here. Body close BELOW 25,750 → short trigger.",
+    "25,750 — First support / round. Break here confirms mean reversion toward 25,472.",
+    "25,472 — Quarterly Open (Sasuke). Key bear target if short triggers.",
+    "FOMC Minutes 1:00 PM CST — EXIT all positions by 12:45 CST. High-impact, no directional trade within 15 min."
   ],
-  "active_thesis": "Bearish bias — hot CPI rejection at PDH 25,726 with NO_LONGS RSI flag. Targeting PDC 25,561 then Qtr Open 25,472. Short-only session.",
-  "invalidation_level": "25,763 weekly high — body close above kills short thesis.",
-  "notes_for_next_run": "Regime change from CHOP to BEAR_TREND. Watch if next run shows price reclaiming VWAP — could mean CPI reaction fades. FOMC minutes could create HIGH_VOL regime. Check 4H RSI — if drops below 73 NO_LONGS flag clears."
+  "active_thesis": "WAIT. 4H RSI NO_LONGS flag (76.40) overrides bullish structure. Prior bearish thesis fully invalidated — price +230pts from last run. No trade until 26,000 breakout clears RSI OR pullback to 25,750 sets up a short.",
+  "invalidation_level": "26,000 body close — would shift regime to BULL_TREND and invalidate mean-revert thesis.",
+  "notes_for_next_run": "Prior bearish thesis completely invalidated — hot CPI was shrugged off, market ripped. Regime change from BEAR_TREND → MEAN_REVERT_OVERBOUGHT. All 4 TF EMAs now bullish. Key watch: does 4H RSI cool below 73 on next run? If so, longs back on table with strong EMA confluence. Watch for FOMC reaction at 1PM — could trigger HIGH_VOL_EXPANSION regime. Gold bid (+1.94%) is a cautionary signal despite equity strength."
 }

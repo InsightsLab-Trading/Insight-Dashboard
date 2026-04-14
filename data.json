@@ -1,26 +1,29 @@
 {
   "meta": {
     "version": "2.1",
-    "generated_at": "2026-04-14T09:30:00-05:00",
+    "generated_at": "2026-04-14T11:00:00-05:00",
     "chart_image": "./assets/chart.png"
   },
   "instrument": "ENQM26",
   "contract_month": "Jun 2026",
   "date": "2026-04-14",
-  "time_cst": "09:30",
-  "session": "RTH Open",
-  "current_price": 25726,
+  "time_cst": "11:00",
+  "session": "Morning",
+  "current_price": 25956,
   "macro": {
-    "tone": "Risk-Off",
-    "us_indices": "SPX -0.8% · NDX -1.1% · RUT -0.6%",
-    "sector_lead": "Utilities, Health Care",
-    "sector_lag": "Tech, Consumer Disc",
-    "gold": "Up",
-    "gold_nq_correlation": "Inverse (risk-off)",
-    "bonds": "Yields Down",
-    "note": "Tech sector lagging with gold bid — classic risk-off rotation. DXY elevated, NQ heavyweights under pressure."
+    "tone": "Risk-On",
+    "us_indices": "IWM +1.42% · QQQ +1.05% · SPY +0.99% · DIA +0.62%",
+    "sector_lead": "Consumer Disc +2.43%, Comm Services +1.63%, Technology +1.21%",
+    "sector_lag": "Energy -2.43%, Materials -0.29%, Consumer Staples -0.07%",
+    "gold": "Up ($4,866 +1.94%)",
+    "gold_nq_correlation": "Partially Conflicting — risk-on equities but gold bid suggests caution",
+    "bonds": "Yields slightly down (10Y 4.30% -0.04)",
+    "dxy": "$97.87 -0.01% — Flat, neutral for NQ",
+    "vix": "18.38 -5.87% — Declining, risk appetite improving",
+    "crypto": "BTC $74,806 +0.48% · ETH $2,343 +0.48% — Risk-on confirmation",
+    "note": "Strong broad market rally. Tech sector leading. VIX declining, DXY flat. Gold bid is the one cautionary signal — partial hedge demand. Overall equity tone firmly risk-on but 4H RSI at 76.40 creates a hard NO_LONGS flag despite macro tailwind."
   },
-  "news_summary": "CPI print this morning came in hotter than expected at +0.4% MoM vs +0.3% forecast. Markets pricing fewer Fed cuts. Watch for continued selling pressure into mid-session. FOMC minutes release at 1:00 PM CST is the next key catalyst.",
+  "news_summary": "No Grok block provided. Prior session context: CPI came in hot (+0.4% vs +0.3% forecast) — however markets appear to be shrugging off that print, rallying strongly. FOMC minutes still pending at 1:00 PM CST — key risk event approaching in ~2 hours. Maintain caution into midday.",
   "news_events": [
     {
       "name": "CPI m/m",
@@ -51,122 +54,115 @@
       "previous": null,
       "actual": null,
       "passed": false
-    },
-    {
-      "name": "30-Year Bond Auction",
-      "currency": "USD",
-      "time": "12:00",
-      "impact": "medium",
-      "forecast": null,
-      "previous": "4.63%",
-      "actual": null,
-      "passed": false
     }
   ],
   "regime": {
-    "name": "BEAR_TREND_NORMAL_VOL_SELL_DOM",
+    "name": "MEAN_REVERT_OVERBOUGHT",
     "confidence": 8,
-    "reasoning": "Price below EMA9+21 on 15m and 1H, RSI trending down from 55 to 45, red BT circles on bounces. Hot CPI adds macro confirmation.",
-    "prior_regime": "CHOP_LOW_VOL",
+    "reasoning": "Price is above EMA9+21 on ALL four timeframes (strongly bullish structure), but 4H RSI at 76.40 triggers the hard NO_LONGS rule. 15m RSI at 77.58 also overbought. Green BT circles on pullbacks earlier in session but price is now extended well above EMAs at the weekly high zone. Regime: MEAN_REVERT_OVERBOUGHT — no new longs, short only on BT rejection + macro confirmation.",
+    "prior_regime": "BEAR_TREND_NORMAL_VOL_SELL_DOM",
     "regime_change": true
   },
   "ema_stack": [
-    { "tf": "15m", "ema9": 25667, "ema21": 25693, "position": "Below Both", "bias": "Bear" },
-    { "tf": "1H",  "ema9": 25646, "ema21": 25561, "position": "Below Both", "bias": "Bear" },
-    { "tf": "4H",  "ema9": 25516, "ema21": 25312, "position": "Above Both", "bias": "Bull" },
-    { "tf": "1D",  "ema9": 25037, "ema21": 24756, "position": "Above Both", "bias": "Bull" }
+    { "tf": "15m", "ema9": 25926, "ema21": 25856, "position": "Above Both", "bias": "Bull" },
+    { "tf": "1H",  "ema9": 25629, "ema21": 25636, "position": "Above Both", "bias": "Bull" },
+    { "tf": "4H",  "ema9": 25630, "ema21": 25383, "position": "Above Both", "bias": "Bull" },
+    { "tf": "1D",  "ema9": 25085, "ema21": 24778, "position": "Above Both", "bias": "Bull" }
   ],
   "rsi": [
-    { "tf": "15m", "value": 65.9, "zone": "Neutral", "flag": null },
-    { "tf": "1H",  "value": 75.1, "zone": "Overbought", "flag": null },
-    { "tf": "4H",  "value": 75.9, "zone": "Overbought", "flag": "NO_LONGS" }
+    { "tf": "15m", "value": 77.58, "zone": "Overbought", "flag": "REDUCE_SIZE" },
+    { "tf": "1H",  "value": 64.45, "zone": "Neutral-High", "flag": null },
+    { "tf": "4H",  "value": 76.40, "zone": "Overbought", "flag": "NO_LONGS" }
   ],
   "volatility": {
-    "atr_15m": 18.4,
+    "atr_15m": null,
     "atr_state": "Normal",
     "squeeze": false
   },
   "vwap": {
-    "price": 25667,
+    "price": null,
     "price_vs_vwap": "Above",
     "signal": "Bullish"
   },
   "volume_profile": {
-    "poc": 25451,
-    "vah": 25763,
-    "val": 25251,
-    "price_in_profile": "Above VAH"
+    "poc": null,
+    "vah": null,
+    "val": null,
+    "price_in_profile": "Extended above prior session range"
   },
   "levels": {
-    "pdh": 25726,
-    "pdl": 25500,
-    "pdc": 25561,
-    "onh": 25730,
-    "onl": 25400,
-    "weekly_high": 25763,
+    "pdh": 25956,
+    "pdl": 24904,
+    "pdc": null,
+    "onh": 25956,
+    "onl": null,
+    "weekly_high": 25956,
     "weekly_low": 24904,
-    "round_above": 25750,
-    "round_below": 25500,
-    "sasuke_above": 25726,
-    "sasuke_above_label": "PDH/ONH",
-    "sasuke_pts_above": 0,
+    "week_middle": 25436,
+    "round_above": 26000,
+    "round_below": 25750,
+    "sasuke_above": 26761,
+    "sasuke_above_label": "Yearly",
+    "sasuke_pts_above": 805,
     "sasuke_below": 25472,
     "sasuke_below_label": "Qtr Open",
-    "sasuke_pts_below": 254
+    "sasuke_pts_below": 484
   },
   "bt_signals": [
-    { "direction": "Sell", "size": 180, "level": 25726, "note": "Rejection at PDH — price followed direction bearish" },
-    { "direction": "Buy",  "size": 155, "level": 25561, "note": "Absorption at PDC — price held, potential support" }
+    { "direction": "Buy",  "size": 150, "level": 25600, "note": "Green absorption circles visible on 15m pullbacks earlier in session — confirmed bull momentum" },
+    { "direction": "Buy",  "size": 150, "level": 25800, "note": "Multiple green circles on 4H push higher — institutional participation on the rally" },
+    { "direction": "Sell", "size": 155, "level": 25956, "note": "Red circle visible on 4H near current highs — potential distribution / rejection at weekly high zone" }
   ],
-  "narrative": "Hot CPI triggered a risk-off flush at the open. Price is testing the prior day high as resistance — BT signals show institutional sellers active at 25,726. 4H RSI at 75.9 is a hard cap on new longs. Primary thesis: fade rip to PDH/ONH with target PDC 25,561 then quarterly open 25,472.",
+  "narrative": "Prior thesis was bearish — that has been completely invalidated. Price has ripped +230pts from the prior session analysis level (25,726) and is now printing 25,956 at the weekly high. All 4 timeframes are above EMA9+21. Macro is firmly risk-on — Tech +1.21%, VIX -5.87%, QQQ +1.05%. However, 4H RSI at 76.40 is a hard NO_LONGS flag per system rules. A red BT signal is appearing at the highs. The key question is whether this is a bull trend continuation (price breaks above 26,000 weekly round) or a MEAN_REVERT_OVERBOUGHT exhaustion. System rules say: NO NEW LONGS. Only valid trade is short on BT rejection with macro confirmation — but macro is not confirming a short right now. Best action: WAIT for either (1) price to break 26,000 and RSI reset, or (2) 15m body close back under 25,750 with red BT confirm. FOMC minutes at 1PM CST in ~2 hours is a live risk.",
   "scenarios": {
-    "bull_probability": 25,
-    "bear_probability": 55,
+    "bull_probability": 55,
+    "bear_probability": 25,
     "chop_probability": 20,
-    "bull_trigger": "15m body close above 25,763 (weekly high) with BT absorption",
-    "bear_trigger": "15m body close below 25,667 (VWAP) — already watching",
-    "chop_trigger": "Price oscillates 25,600–25,726, no conviction either side",
-    "bull_target": "25,800 → 26,000 round",
-    "bear_target": "25,561 (PDC) → 25,472 (Qtr Open)",
-    "invalidation": "15m body close above 25,763 with expanding volume kills short bias"
+    "bull_trigger": "15m body close above 26,000 (psychological round) with green BT — regime would upgrade to BULL_TREND, longs valid on RSI reset",
+    "bear_trigger": "15m body close below 25,750 with red BT at weekly high — targets 25,472 Qtr Open",
+    "chop_trigger": "Price oscillates 25,850–25,956 into FOMC window",
+    "bull_target": "26,000 → 26,200 → 26,761 Yearly",
+    "bear_target": "25,750 → 25,472 (Qtr Open) → 25,200",
+    "invalidation": "15m body close above 26,000 clears NO_LONGS flag context — re-assess regime as BULL_TREND"
   },
   "opportunities": [
     {
       "id": "opp-1",
-      "direction": "SHORT",
-      "conviction": "HIGH",
-      "entry_trigger": "15m body close below VWAP 25,667 after rejection at PDH 25,726. Confirm red BT circle.",
-      "entry_price": 25660,
-      "stop": 25775,
-      "t1": 25561,
-      "t2": 25472,
-      "rr_t1": "1:0.9",
-      "rr_t2": "1:1.6",
+      "direction": "WAIT",
+      "conviction": "MEDIUM",
+      "entry_trigger": "NO TRADE NOW. Wait for: (A) 15m body close above 26,000 + RSI reset below 73 → long re-entry valid, or (B) 15m body close below 25,750 + red BT circle at weekly high → short trigger",
+      "entry_price": null,
+      "stop": null,
+      "t1": null,
+      "t2": null,
+      "rr_t1": "N/A",
+      "rr_t2": "N/A",
       "confluence": {
-        "regime_aligned": true,
+        "regime_aligned": false,
         "ema_aligned": true,
-        "rsi_valid": true,
-        "bt_confirmed": true,
-        "sasuke_level": true,
-        "vp_confluence": true,
+        "rsi_valid": false,
+        "bt_confirmed": false,
+        "sasuke_level": false,
+        "vp_confluence": false,
         "vwap_aligned": true,
         "key_level": true
       },
-      "notes": "4H RSI NO_LONGS flag active — only short entries valid. Size at 50% max per RSI override rule. FOMC minutes at 1PM CST — exit by 12:45 CST."
+      "notes": "4H RSI NO_LONGS flag (76.40) overrides bullish EMA and macro setup. System rule: do not enter longs when 4H RSI >75. FOMC minutes at 1:00 PM CST — do not enter new positions within 15min of that window. Dead Zone starts at 12:00 CST — ~1 hour from now."
     }
   ],
   "scoring": {
-    "regime": 8,
-    "confluence": 9,
-    "rr": 7,
-    "timing": 7,
-    "macro": 9,
-    "overall": 8.1,
-    "decision": "EXECUTE"
+    "regime": 5,
+    "confluence": 4,
+    "rr": 5,
+    "timing": 4,
+    "macro": 8,
+    "overall": 5.2,
+    "decision": "WAIT"
   },
   "risk": {
-    "size_adjustment": "50%",
+    "size_adjustment": "NO_TRADE",
     "rsi_4h_flag": "NO_LONGS",
-    "session_window": "RTH Open — 100% window but RSI halves size"
+    "session_window": "Morning — but FOMC minutes at 1PM CST and Dead Zone at 12PM CST reduce remaining trade window to ~45 min",
+    "dec_flags": ["NO_LONGS_RSI_4H", "FOMC_MINUTES_PENDING", "WEEKLY_HIGH_RESISTANCE", "PRIOR_THESIS_INVALIDATED"]
   }
 }
