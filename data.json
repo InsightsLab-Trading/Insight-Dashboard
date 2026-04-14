@@ -10,10 +10,22 @@
   "time_cst": null,
   "session": null,
   "current_price": null,
+  "macro": {
+    "tone": null,
+    "us_indices": null,
+    "sector_lead": null,
+    "sector_lag": null,
+    "gold": null,
+    "gold_nq_correlation": null,
+    "bonds": null,
+    "note": null
+  },
   "regime": {
     "name": null,
     "confidence": null,
-    "reasoning": null
+    "reasoning": null,
+    "prior_regime": null,
+    "regime_change": false
   },
   "ema_stack": [],
   "rsi": [],
@@ -34,21 +46,12 @@
     "price_in_profile": null
   },
   "levels": {
-    "pdh": null,
-    "pdl": null,
-    "pdc": null,
-    "onh": null,
-    "onl": null,
-    "weekly_high": null,
-    "weekly_low": null,
-    "round_above": null,
-    "round_below": null,
-    "sasuke_above": null,
-    "sasuke_above_label": null,
-    "sasuke_pts_above": null,
-    "sasuke_below": null,
-    "sasuke_below_label": null,
-    "sasuke_pts_below": null
+    "pdh": null, "pdl": null, "pdc": null,
+    "onh": null, "onl": null,
+    "weekly_high": null, "weekly_low": null,
+    "round_above": null, "round_below": null,
+    "sasuke_above": null, "sasuke_above_label": null, "sasuke_pts_above": null,
+    "sasuke_below": null, "sasuke_below_label": null, "sasuke_pts_below": null
   },
   "bt_signals": [],
   "narrative": null,

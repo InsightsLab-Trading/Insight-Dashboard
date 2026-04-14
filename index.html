@@ -201,6 +201,25 @@ header{position:sticky;top:0;z-index:50;background:rgba(6,11,18,.96);backdrop-fi
 .chart-wrap img{width:100%;display:block}
 .chart-placeholder{padding:40px;text-align:center;color:var(--t3);font-size:11px}
 
+/* macro */
+.macro-tone{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:3px;font-size:10px;font-weight:600;margin-bottom:8px}
+.mt-on{background:var(--bull2);color:var(--bull);border:1px solid rgba(16,185,129,.3)}
+.mt-off{background:var(--bear2);color:var(--bear);border:1px solid rgba(239,68,68,.3)}
+.mt-mixed{background:var(--warn2);color:var(--warn);border:1px solid rgba(245,158,11,.3)}
+.macro-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
+.macro-row:last-child{border-bottom:none}
+.macro-key{color:var(--t3);font-size:10px;min-width:70px}
+.macro-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500}
+.macro-note{font-size:11px;color:var(--t2);line-height:1.6;margin-top:8px;padding-top:8px;border-top:1px solid var(--b1)}
+
+/* watch list */
+.watch-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px;align-items:flex-start}
+.watch-item:last-child{border-bottom:none}
+.watch-dot{width:5px;height:5px;border-radius:50%;background:var(--warn);flex-shrink:0;margin-top:5px}
+.watch-text{color:var(--t2);flex:1;line-height:1.5}
+.thesis-block{background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2);border-radius:4px;padding:8px 10px;font-size:11.5px;color:var(--t1);line-height:1.6;margin-bottom:8px}
+.regime-change-badge{display:inline-block;background:rgba(245,158,11,.15);color:var(--warn);border:1px solid rgba(245,158,11,.3);padding:2px 8px;border-radius:3px;font-size:9.5px;font-weight:600;margin-left:8px}
+
 /* risk strip */
 .risk-strip{display:flex;gap:6px;flex-wrap:wrap}
 .rk-chip{flex:1;min-width:90px;background:var(--c2);border:1px solid var(--b1);border-radius:4px;padding:7px 9px;text-align:center}
@@ -269,6 +288,13 @@ header{position:sticky;top:0;z-index:50;background:rgba(6,11,18,.96);backdrop-fi
   </div>
   <div class="col-r">
 
+    <!-- watch list / context chain -->
+    <div class="card" id="contextCard" style="display:none">
+      <div class="card-title"><div class="ct-dot" style="background:var(--warn)"></div>Watching from last run</div>
+      <div id="thesisBlock"></div>
+      <div id="watchList"></div>
+    </div>
+
     <!-- regime -->
     <div class="regime-card rc-chop" id="regimeCard">
       <div class="card-title" style="margin-bottom:8px"><div class="ct-dot"></div>Regime</div>
@@ -278,6 +304,12 @@ header{position:sticky;top:0;z-index:50;background:rgba(6,11,18,.96);backdrop-fi
         <div class="conf-num" id="confNum">—</div>
       </div>
       <div class="regime-reason" id="regimeReason">—</div>
+    </div>
+
+    <!-- macro -->
+    <div class="card">
+      <div class="card-title"><div class="ct-dot"></div>Macro Context</div>
+      <div id="macroCard"><div class="null-text">Loading...</div></div>
     </div>
 
     <!-- ema + rsi + vol -->
@@ -407,10 +439,32 @@ function render(d) {
   if(d.risk?.size_adjustment==='Skip') flags.innerHTML += '<div class="rflag rf-stop">SKIP SESSION</div>';
   if(d.volatility?.atr_state==='Extreme') flags.innerHTML += '<div class="rflag rf-warn">HIGH VOL</div>';
 
+  // macro
+  const mac = d.macro;
+  const macroCard = document.getElementById('macroCard');
+  if(mac) {
+    const toneClass = mac.tone==='Risk-On'?'mt-on':mac.tone==='Risk-Off'?'mt-off':'mt-mixed';
+    const goldColor = mac.gold==='Up'?'var(--bull)':mac.gold==='Down'?'var(--bear)':'var(--t2)';
+    const bondsColor = mac.bonds==='Yields Up'?'var(--bear)':mac.bonds==='Yields Down'?'var(--bull)':'var(--t2)';
+    macroCard.innerHTML = `
+      <div class="macro-tone ${toneClass}">${mac.tone||'—'}</div>
+      <div class="macro-row"><span class="macro-key">US Indices</span><span class="macro-val">${P(mac.us_indices)}</span></div>
+      <div class="macro-row"><span class="macro-key">Leading</span><span class="macro-val" style="color:var(--bull)">${P(mac.sector_lead)}</span></div>
+      <div class="macro-row"><span class="macro-key">Lagging</span><span class="macro-val" style="color:var(--bear)">${P(mac.sector_lag)}</span></div>
+      <div class="macro-row"><span class="macro-key">Gold</span><span class="macro-val" style="color:${goldColor}">${P(mac.gold)}</span></div>
+      <div class="macro-row"><span class="macro-key">Bonds</span><span class="macro-val" style="color:${bondsColor}">${P(mac.bonds)}</span></div>
+      ${mac.note?`<div class="macro-note">${mac.note}</div>`:''}`;
+  } else {
+    macroCard.innerHTML = '<div class="null-text">No macro data — run /analyze with Live Chart 2</div>';
+  }
+
   // regime
   const rc = document.getElementById('regimeCard');
   rc.className = 'regime-card ' + regimeClass(d.regime?.name);
-  document.getElementById('regimeName').textContent = P(d.regime?.name);
+  const regChanged = d.regime?.regime_change;
+  const priorRegime = d.regime?.prior_regime;
+  document.getElementById('regimeName').innerHTML = P(d.regime?.name) +
+    (regChanged && priorRegime ? `<span class="regime-change-badge">was ${priorRegime}</span>` : '');
   const conf = d.regime?.confidence;
   document.getElementById('confBar').style.width = conf!=null ? (conf*10)+'%' : '0';
   document.getElementById('confBar').style.background = confColor(conf||0);
@@ -613,10 +667,32 @@ function render(d) {
   document.getElementById('loader').classList.add('hidden');
 }
 
+async function loadContext() {
+  try {
+    const res = await fetch('./context.json?t='+Date.now());
+    const ctx = await res.json();
+    if(!ctx.active_thesis && (!ctx.watch_list||!ctx.watch_list.length)) return;
+    const card = document.getElementById('contextCard');
+    card.style.display = '';
+    const thesisEl = document.getElementById('thesisBlock');
+    if(ctx.active_thesis) {
+      thesisEl.innerHTML = `<div class="thesis-block">${ctx.active_thesis}</div>`;
+    }
+    const watchEl = document.getElementById('watchList');
+    const items = (ctx.watch_list||[]).filter(Boolean);
+    if(items.length) {
+      watchEl.innerHTML = items.map(w=>`<div class="watch-item"><div class="watch-dot"></div><div class="watch-text">${w}</div></div>`).join('');
+    }
+  } catch(e) { /* no context file yet */ }
+}
+
 async function loadData() {
   try {
-    const res = await fetch('./data.json?t='+Date.now());
-    const d = await res.json();
+    const [dataRes] = await Promise.all([
+      fetch('./data.json?t='+Date.now()),
+      loadContext()
+    ]);
+    const d = await dataRes.json();
     render(d);
   } catch(e) {
     document.getElementById('loader').classList.add('hidden');
