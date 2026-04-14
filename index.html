@@ -4,323 +4,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Market Analysis Dashboard</title>
+<script src="data.js"></script>
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --surface2: #16161f;
-    --border: #1e1e2e;
-    --accent: #4f8ef7;
-    --accent2: #7c6af7;
-    --green: #22c55e;
-    --red: #ef4444;
-    --yellow: #f59e0b;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --dim: #94a3b8;
+    --bg: #0a0a0f; --surface: #111118; --surface2: #16161f; --border: #1e1e2e;
+    --accent: #4f8ef7; --accent2: #7c6af7; --green: #22c55e; --red: #ef4444;
+    --yellow: #f59e0b; --text: #e2e8f0; --muted: #64748b; --dim: #94a3b8;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    padding: 24px;
-    min-height: 100vh;
-  }
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .header-left h1 {
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-  .header-left .sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-  .timestamp {
-    font-size: 11px;
-    color: var(--muted);
-    text-align: right;
-  }
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(34,197,94,0.1);
-    border: 1px solid rgba(34,197,94,0.25);
-    color: var(--green);
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 500;
-    margin-top: 6px;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; line-height: 1.5; padding: 24px; min-height: 100vh; }
+  .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .header-left h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; color: var(--text); }
+  .header-left .sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .timestamp { font-size: 11px; color: var(--muted); text-align: right; }
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: var(--green); font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; margin-top: 6px; }
   .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
   .grid { display: grid; gap: 16px; }
   .grid-4 { grid-template-columns: repeat(4, 1fr); }
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
-  .grid-2 { grid-template-columns: repeat(2, 1fr); }
   .grid-2-1 { grid-template-columns: 2fr 1fr; }
-  .grid-1-2 { grid-template-columns: 1fr 2fr; }
-  .col-span-2 { grid-column: span 2; }
-  .col-span-3 { grid-column: span 3; }
-  .col-span-4 { grid-column: span 4; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
   .card-sm { padding: 14px 16px; }
-  .card-title {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-
-  /* Stat cards */
-  .stat-value {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -1px;
-    line-height: 1;
-  }
+  .card-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 14px; }
+  .stat-value { font-size: 24px; font-weight: 700; letter-spacing: -1px; line-height: 1; }
   .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
-  .stat-change {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-top: 6px;
-  }
-  .up { color: var(--green); }
-  .down { color: var(--red); }
-  .neutral { color: var(--yellow); }
-
-  /* Signal badge */
-  .signal {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
+  .stat-change { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; margin-top: 6px; }
+  .up { color: var(--green); } .down { color: var(--red); } .neutral { color: var(--yellow); }
+  .signal { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
   .signal-bull { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
   .signal-bear { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
   .signal-warn { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
   .signal-neut { background: rgba(100,116,139,0.12); color: var(--dim); border: 1px solid rgba(100,116,139,0.2); }
-
-  /* Timeframe table */
-  .tf-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-  .tf-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px;
-  }
-  .tf-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  .tf-price {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-  .tf-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 3px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 11px;
-  }
-  .tf-row:last-child { border-bottom: none; }
-  .tf-key { color: var(--muted); }
-  .tf-val { font-weight: 500; }
-
-  /* RSI bar */
+  .tf-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .tf-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .tf-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
+  .tf-price { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--text); }
+  .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .tf-key { color: var(--muted); } .tf-val { font-weight: 500; }
   .rsi-bar-wrap { margin-top: 8px; }
-  .rsi-track {
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    position: relative;
-    margin-top: 4px;
-  }
-  .rsi-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.5s;
-  }
+  .rsi-track { height: 4px; background: var(--border); border-radius: 2px; position: relative; margin-top: 4px; }
+  .rsi-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
   .rsi-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-  /* Index table */
   .idx-table { width: 100%; border-collapse: collapse; }
-  .idx-table th {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--muted);
-    font-weight: 600;
-    padding: 6px 8px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  .idx-table td {
-    padding: 7px 8px;
-    font-size: 12px;
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-  }
+  .idx-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 600; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  .idx-table td { padding: 7px 8px; font-size: 12px; border-bottom: 1px solid rgba(30,30,46,0.5); }
   .idx-table tr:last-child td { border-bottom: none; }
-  .idx-table .name { color: var(--dim); font-weight: 500; }
-  .idx-table .price { font-weight: 600; font-variant-numeric: tabular-nums; }
-  .idx-table .chg { font-weight: 600; font-variant-numeric: tabular-nums; }
-
-  /* Bar chart for sectors */
-  .sector-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-  }
+  .idx-table .name { color: var(--dim); font-weight: 500; } .idx-table .price { font-weight: 600; font-variant-numeric: tabular-nums; } .idx-table .chg { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sector-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-bottom: 1px solid rgba(30,30,46,0.5); }
   .sector-row:last-child { border-bottom: none; }
   .sector-name { width: 130px; font-size: 11px; color: var(--dim); flex-shrink: 0; }
   .bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
   .bar-fill { height: 100%; border-radius: 3px; }
   .sector-val { width: 40px; text-align: right; font-size: 11px; font-weight: 600; }
-
-  /* Key levels */
-  .level-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-    font-size: 12px;
-  }
+  .level-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(30,30,46,0.5); font-size: 12px; }
   .level-row:last-child { border-bottom: none; }
-  .level-label { color: var(--muted); font-size: 11px; }
-  .level-val { font-weight: 700; font-variant-numeric: tabular-nums; }
-
-  /* Bias box */
-  .bias-block {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 14px;
-    margin-bottom: 10px;
-  }
+  .level-label { color: var(--muted); font-size: 11px; } .level-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bias-block { background: var(--surface2); border-radius: 8px; padding: 14px; margin-bottom: 10px; }
   .bias-title { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
   .bias-text { font-size: 13px; line-height: 1.6; color: var(--dim); }
-
-  /* Mini heatmap */
-  .heat-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    margin-top: 4px;
-  }
-  .heat-cell {
-    border-radius: 6px;
-    padding: 8px 6px;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 700;
-  }
-  .heat-cell .ticker { font-size: 11px; font-weight: 700; }
-  .heat-cell .pct { font-size: 10px; margin-top: 1px; }
-
-  /* Alert bar */
-  .alert-bar {
-    background: rgba(245,158,11,0.08);
-    border: 1px solid rgba(245,158,11,0.2);
-    border-radius: 8px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-    color: var(--yellow);
-    margin-bottom: 16px;
-  }
+  .heat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 4px; }
+  .heat-cell { border-radius: 6px; padding: 8px 6px; text-align: center; font-size: 10px; font-weight: 700; }
+  .heat-cell .ticker { font-size: 11px; font-weight: 700; } .heat-cell .pct { font-size: 10px; margin-top: 1px; }
+  .alert-bar { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--yellow); margin-bottom: 16px; }
   .alert-icon { font-size: 14px; }
-
-  /* Divider */
   .divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* Summary bullets */
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
   .bullets { list-style: none; }
-  .bullets li {
-    display: flex;
-    gap: 8px;
-    padding: 5px 0;
-    font-size: 12px;
-    color: var(--dim);
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-    line-height: 1.5;
-  }
+  .bullets li { display: flex; gap: 8px; padding: 5px 0; font-size: 12px; color: var(--dim); border-bottom: 1px solid rgba(30,30,46,0.5); line-height: 1.5; }
   .bullets li:last-child { border-bottom: none; }
-  .bullets li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
-
-  /* Correlation mini table */
+  .bullets li::before { content: "→"; color: var(--accent); flex-shrink: 0; }
   .corr-table { width: 100%; border-collapse: collapse; }
-  .corr-table td {
-    padding: 5px 8px;
-    font-size: 11px;
-    border-bottom: 1px solid rgba(30,30,46,0.4);
-  }
+  .corr-table td { padding: 5px 8px; font-size: 11px; border-bottom: 1px solid rgba(30,30,46,0.4); }
   .corr-table tr:last-child td { border-bottom: none; }
-  .corr-pair { color: var(--muted); }
-  .corr-val { font-weight: 700; color: var(--accent); text-align: right; }
-
-  /* Volatility gauge */
-  .vol-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 0;
-    font-size: 12px;
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-  }
+  .corr-pair { color: var(--muted); } .corr-val { font-weight: 700; color: var(--accent); text-align: right; }
+  .vol-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 12px; border-bottom: 1px solid rgba(30,30,46,0.5); }
   .vol-row:last-child { border-bottom: none; }
-
   @media (max-width: 900px) {
     .grid-4 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
@@ -329,434 +88,281 @@
 </style>
 </head>
 <body>
+<div id="app"></div>
+<script>
+(function() {
+  const D = MARKET_DATA;
+  function h(tag, attrs) {
+    const el = document.createElement(tag);
+    const children = Array.prototype.slice.call(arguments, 2);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (k === 'cls') el.className = v;
+      else if (k === 'style') el.style.cssText = v;
+      else if (k === 'html') el.innerHTML = v;
+      else el.setAttribute(k, v);
+    }
+    children.forEach(function(c) {
+      if (c == null) return;
+      el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return el;
+  }
+  function div(cls) { var args = [{cls:cls}].concat(Array.prototype.slice.call(arguments,1)); return h.apply(null, ['div'].concat(args)); }
+  function span(cls, text) { var s = document.createElement('span'); s.className = cls; s.textContent = text; return s; }
+  function spanH(cls, html) { var s = document.createElement('span'); s.className = cls; s.innerHTML = html; return s; }
 
-<div class="header">
-  <div class="header-left">
-    <h1>Market Analysis Dashboard</h1>
-    <div class="sub">ENQH26 · Equities · Macro · April 14, 2026</div>
-    <div class="status-pill"><span class="dot"></span> Live Analysis</div>
-  </div>
-  <div class="timestamp">
-    Generated: April 14, 2026<br>
-    Instrument: NQ Futures (ENQH26)<br>
-    Session: US Regular Hours
-  </div>
-</div>
+  function renderHeader() {
+    var m = D.meta;
+    return h('div', {cls:'header'},
+      h('div', {cls:'header-left'},
+        h('h1', {}, 'Market Analysis Dashboard'),
+        h('div', {cls:'sub'}, m.symbol + ' · Equities · Macro · ' + m.date),
+        h('div', {cls:'status-pill'}, h('span',{cls:'dot'}), ' Live Analysis')
+      ),
+      h('div', {cls:'timestamp', html:'Generated: '+m.generated+'<br>Instrument: '+m.instrument+'<br>Session: '+m.session})
+    );
+  }
 
-<!-- Alert -->
-<div class="alert-bar">
-  <span class="alert-icon">⚠</span>
-  <span><strong>RSI Overbought Alert:</strong> 1H RSI at 78.26 and 4H RSI at 72.7 — price extended. Momentum strong but caution warranted at highs. Watch for consolidation or pullback.</span>
-</div>
+  function renderAlert() {
+    if (!D.alert.show) return null;
+    return h('div', {cls:'alert-bar'}, span('alert-icon','⚠'), spanH('', D.alert.text));
+  }
 
-<!-- Top stat row -->
-<div class="grid grid-4" style="margin-bottom:16px;">
-  <div class="card card-sm">
-    <div class="card-title">NQ Futures</div>
-    <div class="stat-value">25,917</div>
-    <div class="stat-label">ENQH26 Last Price</div>
-    <div class="stat-change up">▲ Strong Uptrend</div>
-  </div>
-  <div class="card card-sm">
-    <div class="card-title">Market Bias</div>
-    <div style="margin-top:4px;">
-      <div class="signal signal-bull" style="margin-bottom:8px;">● Bullish</div>
-      <div style="font-size:11px; color:var(--muted); line-height:1.5;">All timeframes aligned. Price above all EMAs. Broad market risk-on.</div>
-    </div>
-  </div>
-  <div class="card card-sm">
-    <div class="card-title">Volatility</div>
-    <div class="stat-value neutral">18.46</div>
-    <div class="stat-label">VIX Index</div>
-    <div class="stat-change down">▼ −3.45% · Contracting</div>
-  </div>
-  <div class="card card-sm">
-    <div class="card-title">Breadth</div>
-    <div style="margin-top:2px;">
-      <div style="font-size:11px; color:var(--muted); margin-bottom:6px;">Index Performance (Today)</div>
-      <div style="display:flex; flex-direction:column; gap:4px;">
-        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">IWM</span><span class="up" style="font-weight:700">+1.42%</span></div>
-        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">QQQ</span><span class="up" style="font-weight:700">+1.05%</span></div>
-        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">SPY</span><span class="up" style="font-weight:700">+0.99%</span></div>
-        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">DIA</span><span class="up" style="font-weight:700">+0.62%</span></div>
-      </div>
-    </div>
-  </div>
-</div>
+  function renderStats() {
+    var s = D.stats;
+    var breadthRows = s.breadth.map(function(b) {
+      return h('div', {style:'display:flex;justify-content:space-between;font-size:12px;'},
+        h('span',{style:'color:var(--dim);'}, b.ticker),
+        h('span',{cls:b.cls,style:'font-weight:700;'}, b.pct)
+      );
+    });
+    return h('div', {cls:'grid grid-4',style:'margin-bottom:16px;'},
+      h('div',{cls:'card card-sm'}, div('card-title','NQ Futures'), h('div',{cls:'stat-value'},s.price.value), h('div',{cls:'stat-label'},s.price.label), h('div',{cls:'stat-change '+s.price.changeClass},s.price.change)),
+      h('div',{cls:'card card-sm'}, div('card-title','Market Bias'),
+        h('div',{style:'margin-top:4px;'},
+          h('div',{cls:'signal '+s.bias.signalClass,style:'margin-bottom:8px;'},s.bias.dot+' '+s.bias.signal),
+          h('div',{style:'font-size:11px;color:var(--muted);line-height:1.5;'},s.bias.description)
+        )
+      ),
+      h('div',{cls:'card card-sm'}, div('card-title','Volatility'), h('div',{cls:'stat-value '+s.volatility.valueClass},s.volatility.value), h('div',{cls:'stat-label'},s.volatility.label), h('div',{cls:'stat-change '+s.volatility.changeClass},s.volatility.change)),
+      h('div',{cls:'card card-sm'}, div('card-title','Breadth'),
+        h('div',{style:'margin-top:2px;'},
+          h('div',{style:'font-size:11px;color:var(--muted);margin-bottom:6px;'},'Index Performance (Today)'),
+          h.apply(null, ['div',{style:'display:flex;flex-direction:column;gap:4px;'}].concat(breadthRows))
+        )
+      )
+    );
+  }
 
-<!-- ENQH26 Multi-Timeframe Analysis -->
-<div class="card" style="margin-bottom:16px;">
-  <div class="card-title">ENQH26 · Multi-Timeframe Analysis</div>
-  <div class="tf-grid">
+  function renderTFCard(tf) {
+    var rows = tf.rows.map(function(r) {
+      return h('div',{cls:'tf-row'}, span('tf-key',r.key), h('span',{cls:'tf-val '+r.cls},r.val));
+    });
+    return h.apply(null, ['div',{cls:'tf-card'},
+      div('tf-label',tf.label),
+      h('div',{cls:'tf-price'},tf.price),
+      h('div',{style:'margin:8px 0 10px;'}, h('span',{cls:'signal '+tf.signalClass},tf.signal))
+    ].concat(rows).concat([
+      h('div',{cls:'rsi-bar-wrap'},
+        h('div',{style:'display:flex;justify-content:space-between;font-size:10px;color:var(--muted);'},
+          h('span',{},'RSI(14)'), h('span',{cls:tf.rsi.cls},tf.rsi.label)
+        ),
+        h('div',{cls:'rsi-track'}, h('div',{cls:'rsi-fill',style:'width:'+tf.rsi.value+'%;background:'+tf.rsi.gradient+';'})),
+        h('div',{cls:'rsi-label'}, h('span',{},'0'), h('span',{},'30'), h('span',{},'50'), h('span',{},'70'), h('span',{},'100'))
+      ),
+      h('div',{style:'margin-top:8px;font-size:10px;color:'+(tf.note.cls==='down'?'var(--red)':'var(--muted)')+';line-height:1.5;'},tf.note.text)
+    ]));
+  }
 
-    <!-- 15m -->
-    <div class="tf-card">
-      <div class="tf-label">15 Minute</div>
-      <div class="tf-price">25,917</div>
-      <div style="margin: 8px 0 10px;">
-        <span class="signal signal-warn">Consolidating</span>
-      </div>
-      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,919</span></div>
-      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">25,966</span></div>
-      <div class="tf-row"><span class="tf-key">PDHigh</span><span class="tf-val up">25,969.25</span></div>
-      <div class="tf-row"><span class="tf-key">PDLow</span><span class="tf-val down">24,904.50</span></div>
-      <div class="rsi-bar-wrap">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
-          <span>RSI(14)</span><span class="neutral">65.70</span>
-        </div>
-        <div class="rsi-track">
-          <div class="rsi-fill" style="width:65.7%;background:linear-gradient(90deg,#22c55e,#f59e0b);"></div>
-        </div>
-        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
-      </div>
-      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">Price below both EMAs. Sideways chop near highs. Volume cluster resistance above.</div>
-    </div>
+  function renderTimeframes() {
+    return h.apply(null, ['div',{cls:'card',style:'margin-bottom:16px;'},
+      div('card-title','ENQH26 · Multi-Timeframe Analysis'),
+      h.apply(null, ['div',{cls:'tf-grid'}].concat(D.timeframes.map(renderTFCard)))
+    ]);
+  }
 
-    <!-- 1H -->
-    <div class="tf-card">
-      <div class="tf-label">1 Hour</div>
-      <div class="tf-price">25,917</div>
-      <div style="margin: 8px 0 10px;">
-        <span class="signal signal-warn">Overbought</span>
-      </div>
-      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,621</span></div>
-      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">25,682</span></div>
-      <div class="tf-row"><span class="tf-key">PDHigh</span><span class="tf-val up">25,599.25</span></div>
-      <div class="tf-row"><span class="tf-key">PDLow</span><span class="tf-val down">24,904.50</span></div>
-      <div class="rsi-bar-wrap">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
-          <span>RSI(14)</span><span class="down">78.26</span>
-        </div>
-        <div class="rsi-track">
-          <div class="rsi-fill" style="width:78.26%;background:linear-gradient(90deg,#22c55e,#ef4444);"></div>
-        </div>
-        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
-      </div>
-      <div style="margin-top:8px;font-size:10px;color:var(--red);line-height:1.5;">⚠ RSI overbought. Price extended ~296pts above EMA21. Elevated pullback risk.</div>
-    </div>
+  function renderKeyLevels() {
+    return h.apply(null, ['div',{cls:'card'},
+      div('card-title','Key Price Levels · '+D.meta.symbol)
+    ].concat(D.keyLevels.map(function(l) {
+      return h('div',{cls:'level-row'}, span('level-label',l.label), h('span',{cls:'level-val '+l.cls},l.val));
+    })));
+  }
 
-    <!-- 4H -->
-    <div class="tf-card">
-      <div class="tf-label">4 Hour</div>
-      <div class="tf-price">25,917</div>
-      <div style="margin: 8px 0 10px;">
-        <span class="signal signal-bull">Strong Bull</span>
-      </div>
-      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,622</span></div>
-      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">25,379</span></div>
-      <div class="tf-row"><span class="tf-key">Week High</span><span class="tf-val up">25,917.25</span></div>
-      <div class="tf-row"><span class="tf-key">Week Mid</span><span class="tf-val neutral">25,436.88</span></div>
-      <div class="tf-row"><span class="tf-key">Week Low</span><span class="tf-val down">24,904.50</span></div>
-      <div class="rsi-bar-wrap">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
-          <span>RSI(14)</span><span class="neutral">72.70</span>
-        </div>
-        <div class="rsi-track">
-          <div class="rsi-fill" style="width:72.7%;background:linear-gradient(90deg,#22c55e,#f59e0b);"></div>
-        </div>
-        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
-      </div>
-      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">Impulse leg from week low +1,013pts. Testing week high. Momentum still strong.</div>
-    </div>
+  function renderIndices() {
+    var yieldCols = D.yields.map(function(y) {
+      return h('div',{style:'text-align:center;'},
+        h('div',{style:'font-size:11px;color:var(--muted);'},y.tenor),
+        h('div',{style:'font-weight:700;font-size:13px;'},y.val),
+        h('div',{style:'font-size:10px;color:var(--, '+(y.cls==='up'?'var(--green)':'var(--red)')+');'},y.chg)
+      );
+    });
+    // fix yield color
+    yieldCols = D.yields.map(function(y) {
+      var el = h('div',{style:'text-align:center;'},
+        h('div',{style:'font-size:11px;color:var(--muted);'},y.tenor),
+        h('div',{style:'font-weight:700;font-size:13px;'},y.val)
+      );
+      var chg = document.createElement('div');
+      chg.style.fontSize = '10px';
+      chg.style.color = y.cls === 'up' ? '#22c55e' : '#ef4444';
+      chg.textContent = y.chg;
+      el.appendChild(chg);
+      return el;
+    });
+    return h('div',{cls:'card'},
+      div('card-title','US Index Performance'),
+      h('table',{cls:'idx-table'},
+        h('thead',{}, h('tr',{}, h('th',{},'Index'), h('th',{},'Price'), h('th',{},'Chg'))),
+        h.apply(null, ['tbody',{}].concat(D.indices.map(function(idx) {
+          return h('tr',{}, h('td',{cls:'name'},idx.name), h('td',{cls:'price'},idx.price), h('td',{cls:'chg '+idx.cls},idx.chg));
+        })))
+      ),
+      h('hr',{cls:'divider',style:'margin:10px 0;'}),
+      h('div',{cls:'card-title',style:'margin-bottom:8px;'},'Bond Yields'),
+      h.apply(null, ['div',{style:'display:grid;grid-template-columns:repeat(3,1fr);gap:6px;'}].concat(yieldCols))
+    );
+  }
 
-    <!-- 1D -->
-    <div class="tf-card">
-      <div class="tf-label">Daily</div>
-      <div class="tf-price">25,077</div>
-      <div style="margin: 8px 0 10px;">
-        <span class="signal signal-bull">Uptrend</span>
-      </div>
-      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,077</span></div>
-      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">24,774</span></div>
-      <div class="tf-row"><span class="tf-key">Month High</span><span class="tf-val up">25,969.25</span></div>
-      <div class="tf-row"><span class="tf-key">Month Mid</span><span class="tf-val neutral">24,617.62</span></div>
-      <div class="tf-row"><span class="tf-key">Month Low</span><span class="tf-val down">23,666.00</span></div>
-      <div class="rsi-bar-wrap">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
-          <span>RSI(14)</span><span class="up">~62</span>
-        </div>
-        <div class="rsi-track">
-          <div class="rsi-fill" style="width:62%;background:linear-gradient(90deg,#22c55e,#4f8ef7);"></div>
-        </div>
-        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
-      </div>
-      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">V-shape recovery from Feb lows ~23,400. EMA stack bullish. Price at month highs.</div>
-    </div>
+  function renderVolGlobal() {
+    return h.apply(null, ['div',{cls:'card'},
+      div('card-title','Volatility & Global Markets')
+    ].concat(D.volatility.map(function(v) {
+      return h('div',{cls:'vol-row'},
+        h('span',{style:'color:var(--muted);'},v.label),
+        h('span',{}, h('span',{style:'font-weight:700;'},v.val), h('span',{cls:v.chgCls,style:'font-size:11px;margin-left:4px;'},v.chg))
+      );
+    })).concat([
+      h('hr',{cls:'divider',style:'margin:8px 0;'}),
+      h('div',{cls:'card-title',style:'margin-bottom:8px;'},'Global Indices')
+    ]).concat(D.globalIndices.map(function(g) {
+      return h('div',{cls:'vol-row'}, h('span',{style:'color:var(--muted);'},g.name), h('span',{cls:g.cls,style:'font-weight:600;'},g.chg));
+    })));
+  }
 
-  </div>
-</div>
+  function renderSectors() {
+    return h.apply(null, ['div',{cls:'card'},
+      div('card-title','Sector Performance · S&P 500')
+    ].concat(D.sectors.map(function(s) {
+      return h('div',{cls:'sector-row'},
+        span('sector-name',s.name),
+        h('div',{cls:'bar-wrap'}, h('div',{cls:'bar-fill',style:'width:'+s.barWidth+'%;background:'+s.barColor+';'+(s.barOpacity?'opacity:'+s.barOpacity+';':'')})),
+        h('span',{cls:'sector-val '+s.cls},s.val)
+      );
+    })).concat([
+      h('hr',{cls:'divider',style:'margin:12px 0 10px;'}),
+      h('div',{cls:'card-title',style:'margin-bottom:8px;'},'Notable Movers'),
+      h.apply(null, ['div',{cls:'heat-grid'}].concat(D.movers.map(function(m) {
+        return h('div',{cls:'heat-cell',style:'background:'+m.bg+';border:1px solid '+m.border+';'},
+          h('div',{cls:'ticker '+m.cls},m.ticker), h('div',{cls:'pct '+m.cls},m.pct)
+        );
+      })))
+    ]));
+  }
 
-<!-- Key Levels + Index Performance row -->
-<div class="grid grid-3" style="margin-bottom:16px;">
+  function renderCorr() {
+    return h.apply(null, ['div',{cls:'card'},
+      div('card-title','Index Correlations'),
+      h.apply(null, ['table',{cls:'corr-table'}].concat(D.correlations.map(function(c) {
+        return h('tr',{}, h('td',{cls:'corr-pair'},c.pair), h('td',{cls:'corr-val'},c.val));
+      })))
+    ].concat([h('div',{style:'margin-top:8px;font-size:10px;color:var(--muted);'},D.correlationsNote)]));
+  }
 
-  <!-- Key Levels -->
-  <div class="card">
-    <div class="card-title">Key Price Levels · ENQH26</div>
-    <div class="level-row">
-      <span class="level-label">Month High / Resistance</span>
-      <span class="level-val down">25,969.25</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">Current Price</span>
-      <span class="level-val">25,917.00</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">PDHigh</span>
-      <span class="level-val neutral">25,599.25</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">Daily EMA(9)</span>
-      <span class="level-val up">25,077.57</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">Month Middle</span>
-      <span class="level-val up">24,617.62</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">Daily EMA(21)</span>
-      <span class="level-val up">24,774.49</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">Week Low / Support</span>
-      <span class="level-val up">24,904.50</span>
-    </div>
-    <div class="level-row">
-      <span class="level-label">Month Low</span>
-      <span class="level-val up">23,666.00</span>
-    </div>
-  </div>
+  function renderCommodities() {
+    return h.apply(null, ['div',{cls:'card'}, div('card-title','Commodities & FX')].concat(
+      D.commodities.map(function(c) {
+        return h('div',{cls:'vol-row'}, h('span',{style:'color:var(--muted);'},c.label),
+          h('span',{}, h('span',{style:'font-weight:700;'},c.val), h('span',{cls:c.chgCls,style:'font-size:11px;margin-left:4px;'},c.chg))
+        );
+      })
+    ));
+  }
 
-  <!-- Index Performance -->
-  <div class="card">
-    <div class="card-title">US Index Performance</div>
-    <table class="idx-table">
-      <thead>
-        <tr>
-          <th>Index</th>
-          <th>Price</th>
-          <th>Chg</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="name">S&P 500</td><td class="price">5,950.44</td><td class="chg up">+0.93%</td></tr>
-        <tr><td class="name">Nasdaq 100</td><td class="price">25,745.52</td><td class="chg up">+1.03%</td></tr>
-        <tr><td class="name">Nasdaq Comp.</td><td class="price">23,555.89</td><td class="chg up">+1.01%</td></tr>
-        <tr><td class="name">Dow Jones</td><td class="price">48,462.21</td><td class="chg up">+0.51%</td></tr>
-        <tr><td class="name">Russell 2000</td><td class="price">2,097.89</td><td class="chg up">+1.03%</td></tr>
-        <tr><td class="name">Dollar Index</td><td class="price">$97.91</td><td class="chg down">−0.47%</td></tr>
-      </tbody>
-    </table>
-    <hr class="divider" style="margin:10px 0;">
-    <div class="card-title" style="margin-bottom:8px;">Bond Yields</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
-      <div style="text-align:center;"><div style="font-size:11px;color:var(--muted)">2Y</div><div style="font-weight:700;font-size:13px">3.78%</div><div style="font-size:10px;color:var(--red)">−0.03</div></div>
-      <div style="text-align:center;"><div style="font-size:11px;color:var(--muted)">10Y</div><div style="font-weight:700;font-size:13px">4.30%</div><div style="font-size:10px;color:var(--red)">−0.01</div></div>
-      <div style="text-align:center;"><div style="font-size:11px;color:var(--muted)">30Y</div><div style="font-weight:700;font-size:13px">4.90%</div><div style="font-size:10px;color:var(--red)">+0.01</div></div>
-    </div>
-  </div>
+  function renderCrypto() {
+    return h.apply(null, ['div',{cls:'card'}, div('card-title','Crypto')].concat(
+      D.crypto.map(function(c) {
+        return h('div',{cls:'vol-row'}, h('span',{style:'color:var(--muted);'},c.label),
+          h('span',{}, h('span',{style:'font-weight:700;'},c.val), h('span',{cls:c.chgCls,style:'font-size:11px;margin-left:4px;'},c.chg))
+        );
+      })
+    ));
+  }
 
-  <!-- Volatility & Global -->
-  <div class="card">
-    <div class="card-title">Volatility & Global Markets</div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">VIX</span>
-      <span><span style="font-weight:700">18.46</span> <span class="down" style="font-size:11px">−3.45%</span></span>
-    </div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">NASDAQ VIX</span>
-      <span><span style="font-weight:700">22.41</span> <span class="down" style="font-size:11px">−3.57%</span></span>
-    </div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">MOVE Bond Vol</span>
-      <span><span style="font-weight:700">72.13</span> <span class="down" style="font-size:11px">−3.64%</span></span>
-    </div>
-    <hr class="divider" style="margin:8px 0;">
-    <div class="card-title" style="margin-bottom:8px;">Global Indices</div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">Euro Stoxx 50</span>
-      <span class="up" style="font-weight:600">+1.19%</span>
-    </div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">DAX</span>
-      <span class="up" style="font-weight:600">+1.12%</span>
-    </div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">Nikkei 225</span>
-      <span class="up" style="font-weight:600">+2.33%</span>
-    </div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">Hang Seng</span>
-      <span class="up" style="font-weight:600">+0.80%</span>
-    </div>
-    <div class="vol-row">
-      <span style="color:var(--muted)">IBEX 35</span>
-      <span class="up" style="font-weight:600">+1.08%</span>
-    </div>
-  </div>
+  function renderCOT() {
+    var cot = D.cot;
+    var groupCards = cot.groups.map(function(g) {
+      return h('div',{style:'background:var(--surface2);border-radius:8px;padding:14px;'},
+        h('div',{style:'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);margin-bottom:8px;'},g.label),
+        h('div',{style:'display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);'},
+          h('span',{style:'color:var(--muted);'},'Long'),
+          h('span',{style:'font-weight:600;'},g.long.val+' ', h('span',{cls:g.long.chgCls,style:'font-size:10px;'},g.long.chg))
+        ),
+        h('div',{style:'display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);'},
+          h('span',{style:'color:var(--muted);'},'Short'),
+          h('span',{style:'font-weight:600;'},g.short.val+' ', h('span',{cls:g.short.chgCls,style:'font-size:10px;'},g.short.chg))
+        ),
+        h('div',{style:'display:flex;justify-content:space-between;font-size:12px;padding:6px 0;'},
+          h('span',{style:'color:var(--muted);'},'Net Position'),
+          h('span',{cls:g.net.cls,style:'font-weight:700;'},g.net.val)
+        ),
+        h('div',{cls:'signal '+g.signalClass,style:'margin-top:4px;font-size:10px;'},g.signal)
+      );
+    });
+    return h.apply(null, ['div',{cls:'card',style:'margin-bottom:16px;'},
+      div('card-title',cot.title),
+      h.apply(null, ['div',{cls:'grid grid-3',style:'gap:12px;margin-bottom:12px;'}].concat(groupCards)),
+      h('div',{style:'display:flex;gap:10px;align-items:center;flex-wrap:wrap;'},
+        h('div',{style:'background:var(--surface2);border-radius:8px;padding:10px 16px;font-size:12px;'},
+          h('span',{style:'color:var(--muted);'},'Open Interest: '),
+          h('span',{style:'font-weight:700;'},cot.openInterest.val+' '),
+          h('span',{cls:cot.openInterest.chgCls,style:'font-size:11px;'},cot.openInterest.chg)
+        ),
+        h('div',{style:'flex:1;font-size:11px;color:var(--muted);line-height:1.6;'},cot.note)
+      )
+    ]);
+  }
 
-</div>
+  function renderThesis() {
+    var t = D.thesis;
+    function biasBlock(b) {
+      return h('div',{cls:'bias-block'}, h('div',{cls:'bias-title'},b.title), h('div',{cls:'bias-text'},b.text));
+    }
+    return h.apply(null, ['div',{cls:'card'},
+      div('card-title','Trade Thesis & Analytical Summary'),
+      h('div',{cls:'grid grid-3',style:'gap:12px;'},
+        h('div',{},biasBlock(t.bull)), h('div',{},biasBlock(t.bear)), h('div',{},biasBlock(t.scenarios))
+      ),
+      h('hr',{cls:'divider',style:'margin:14px 0;'}),
+      h('div',{cls:'card-title',style:'margin-bottom:10px;'},'Actionable Observations'),
+      h.apply(null, ['ul',{cls:'bullets'}].concat(t.bullets.map(function(b){ return h('li',{},b); })))
+    ]);
+  }
 
-<!-- Sector Heatmap + Correlations -->
-<div class="grid grid-2-1" style="margin-bottom:16px;">
+  function render() {
+    var app = document.getElementById('app');
+    app.appendChild(renderHeader());
+    var a = renderAlert(); if (a) app.appendChild(a);
+    app.appendChild(renderStats());
+    app.appendChild(renderTimeframes());
+    app.appendChild(h('div',{cls:'grid grid-3',style:'margin-bottom:16px;'},
+      renderKeyLevels(), renderIndices(), renderVolGlobal()
+    ));
+    app.appendChild(h('div',{cls:'grid grid-2-1',style:'margin-bottom:16px;'},
+      renderSectors(),
+      h('div',{style:'display:flex;flex-direction:column;gap:16px;'},
+        renderCorr(), renderCommodities(), renderCrypto()
+      )
+    ));
+    app.appendChild(renderCOT());
+    app.appendChild(renderThesis());
+    app.appendChild(h('div',{style:'margin-top:16px;text-align:center;font-size:10px;color:var(--muted);'},
+      'Market Analysis Dashboard · '+D.meta.symbol+' · '+D.meta.date+' · Data sourced from live session screenshots · For informational purposes only'
+    ));
+  }
 
-  <div class="card">
-    <div class="card-title">Sector Performance · S&P 500</div>
-    <div class="sector-row">
-      <span class="sector-name">Consumer Cyclical</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
-      <span class="sector-val up">+2.06%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Communication Svcs</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:88%;background:var(--green);"></div></div>
-      <span class="sector-val up">+1.82%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Technology</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:75%;background:var(--green);"></div></div>
-      <span class="sector-val up">+1.55%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Financials</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:58%;background:var(--green);"></div></div>
-      <span class="sector-val up">+1.19%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Real Estate</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:50%;background:var(--green);"></div></div>
-      <span class="sector-val up">+1.02%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Health Care</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:40%;background:var(--green);"></div></div>
-      <span class="sector-val up">+0.83%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Industrials</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:30%;background:var(--green);"></div></div>
-      <span class="sector-val up">+0.26%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Materials</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:24%;background:rgba(245,158,11,0.7);"></div></div>
-      <span class="sector-val down">−0.55%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Utilities</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:20%;background:var(--red);opacity:0.7;"></div></div>
-      <span class="sector-val down">−0.61%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Consumer Staples</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:22%;background:var(--red);opacity:0.7;"></div></div>
-      <span class="sector-val down">−0.62%</span>
-    </div>
-    <div class="sector-row">
-      <span class="sector-name">Energy</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:55%;background:var(--red);"></div></div>
-      <span class="sector-val down">−2.62%</span>
-    </div>
-    <hr class="divider" style="margin:12px 0 10px;">
-    <div class="card-title" style="margin-bottom:8px;">Notable Movers</div>
-    <div class="heat-grid">
-      <div class="heat-cell" style="background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.3);">
-        <div class="ticker up">AMZN</div><div class="pct up">+3.98%</div>
-      </div>
-      <div class="heat-cell" style="background:rgba(34,197,94,0.18);border:1px solid rgba(34,197,94,0.3);">
-        <div class="ticker up">GOOG</div><div class="pct up">+3.11%</div>
-      </div>
-      <div class="heat-cell" style="background:rgba(34,197,94,0.16);border:1px solid rgba(34,197,94,0.3);">
-        <div class="ticker up">TSLA</div><div class="pct up">+3.16%</div>
-      </div>
-      <div class="heat-cell" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);">
-        <div class="ticker down">AAPL</div><div class="pct down">−0.17%</div>
-      </div>
-      <div class="heat-cell" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);">
-        <div class="ticker down">JPM</div><div class="pct down">−0.54%</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right column: Correlations + Commodities + Crypto -->
-  <div style="display:flex;flex-direction:column;gap:16px;">
-
-    <div class="card">
-      <div class="card-title">Index Correlations</div>
-      <table class="corr-table">
-        <tr><td class="corr-pair">SPY / QQQ</td><td class="corr-val">0.990</td></tr>
-        <tr><td class="corr-pair">SPY / DIA</td><td class="corr-val">0.981</td></tr>
-        <tr><td class="corr-pair">SPY / IWM</td><td class="corr-val">0.986</td></tr>
-        <tr><td class="corr-pair">QQQ / IWM</td><td class="corr-val">0.958</td></tr>
-        <tr><td class="corr-pair">QQQ / DIA</td><td class="corr-val">0.958</td></tr>
-        <tr><td class="corr-pair">DIA / IWM</td><td class="corr-val">0.984</td></tr>
-      </table>
-      <div style="margin-top:8px;font-size:10px;color:var(--muted);">All indices highly correlated — unified risk-on move.</div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Commodities & FX</div>
-      <div class="vol-row"><span style="color:var(--muted)">Crude Oil (WTI)</span><span><span style="font-weight:700">$91.29</span> <span class="down" style="font-size:11px">−7.86%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">Brent Crude</span><span><span style="font-weight:700">$94.85</span> <span class="down" style="font-size:11px">−4.54%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">Natural Gas</span><span><span style="font-weight:700">$2.00</span> <span class="down" style="font-size:11px">−2.48%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">Gold</span><span><span style="font-weight:700">$4,602.30</span> <span class="up" style="font-size:11px">+1.99%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">EUR/USD</span><span><span style="font-weight:700">$1.18</span> <span class="up" style="font-size:11px">+0.32%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">USD/JPY</span><span><span style="font-weight:700">¥158.78</span> <span class="down" style="font-size:11px">−0.40%</span></span></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Crypto</div>
-      <div class="vol-row"><span style="color:var(--muted)">Bitcoin</span><span><span style="font-weight:700">$76,598</span> <span class="up" style="font-size:11px">+0.20%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">Ethereum</span><span><span style="font-weight:700">$2,337</span> <span class="down" style="font-size:11px">−1.41%</span></span></div>
-      <div class="vol-row"><span style="color:var(--muted)">Solana</span><span><span style="font-weight:700">$85.02</span> <span class="down" style="font-size:11px">−1.00%</span></span></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Bias & Trade Thesis -->
-<div class="card">
-  <div class="card-title">Trade Thesis & Analytical Summary</div>
-  <div class="grid grid-3" style="gap:12px;">
-
-    <div>
-      <div class="bias-block">
-        <div class="bias-title">📈 Bull Case</div>
-        <div class="bias-text">All major indices up 0.6–1.4% on the day. VIX contracting to 18.46 (-3.45%) and MOVE Bond Vol declining confirm broad risk-on. NQ in strong uptrend — price above all EMAs on 1H/4H/1D. Recovery from Feb lows complete. Global markets (Nikkei +2.33%, DAX +1.12%) confirming the bid. Consumer Cyclical and Comm Services sectors leading — growth rotation intact.</div>
-      </div>
-    </div>
-
-    <div>
-      <div class="bias-block">
-        <div class="bias-title">⚠ Bear Case / Risks</div>
-        <div class="bias-text">1H RSI at 78.26 and 4H RSI at 72.7 — both in overbought territory. Price is ~296 pts above 1H EMA(21) — stretched. NQ approaching month high resistance at 25,969. On 15m, price is actually below both short-term EMAs suggesting near-term exhaustion. Energy sector collapsing (-7.86% oil) may signal macro concern. Elevated bond yields (10Y 4.30%, 30Y 4.90%) remain a headwind.</div>
-      </div>
-    </div>
-
-    <div>
-      <div class="bias-block">
-        <div class="bias-title">🎯 Key Scenarios to Watch</div>
-        <div class="bias-text">Break and hold above 25,969.25 (month high) = further upside toward 26,000+. Rejection at 25,969 with RSI divergence = possible pullback to 25,600–25,750 support zone. 15m consolidation resolution: break up = continuation; break below 25,800 = caution. Watch Energy sector — oil weakness could drag broader market if sustained.</div>
-      </div>
-    </div>
-
-  </div>
-
-  <hr class="divider" style="margin:14px 0;">
-  <div class="card-title" style="margin-bottom:10px;">Actionable Observations</div>
-  <ul class="bullets">
-    <li>NQ is testing month high at 25,969.25 — the 52-pt gap to resistance is the key near-term battleground</li>
-    <li>All 4 timeframes aligned bullish on structure, but short-term (15m) shows EMA compression and consolidation — classic pre-move setup</li>
-    <li>IWM outperforming (+1.42%) signals broad risk appetite, not just mega-cap rotation — healthy breadth</li>
-    <li>Dollar weakness (DXY -0.47%) is supportive of equities and gold; gold +1.99% to $4,602 confirms macro uncertainty bid</li>
-    <li>Oil -7.86% is the outlier — energy sector (-2.62%) is the only significant red sector; watch for contagion vs. isolated move</li>
-    <li>Correlation matrix shows near-perfect index co-movement (0.958–0.990) — this is a systematic macro move, not stock-picking environment</li>
-    <li>TSLA +3.16%, AMZN +3.98%, GOOG +3.11% — mega-cap growth leading; AAPL -0.17% and JPM -0.54% are notable laggards worth monitoring</li>
-  </ul>
-</div>
-
-<div style="margin-top:16px;text-align:center;font-size:10px;color:var(--muted);">
-  Market Analysis Dashboard · ENQH26 · April 14, 2026 · Data sourced from live session screenshots · For informational purposes only
-</div>
-
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
 </body>
 </html>
