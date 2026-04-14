@@ -10,7 +10,7 @@ const MARKET_DATA = {
     instrument: "NQ Futures (ENQM26)",
     symbol:     "ENQM26",
     date:       "April 14, 2026",
-    session:    "US Regular Hours",
+    session:    "US After Hours",
     generated:  "April 14, 2026",
   },
 
