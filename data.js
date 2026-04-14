@@ -58,11 +58,7 @@ const MARKET_DATA = {
       signalClass: "signal-bull",
       rows: [
         { key: "EMA(9)",   val: "25,937.94", cls: "" },
-        { key: "EMA(21)",  val: "25,888.96", cls: "" },
-        { key: "PDHigh",   val: "25,969.25", cls: "up" },
-        { key: "PDMid",    val: "25,764.62", cls: "neutral" },
-        { key: "PDLow",    val: "24,904.50", cls: "down" },
-      ],
+        { key: "EMA(21)",  val: "25,888.96", cls: "" },      ],
       rsi: { value: 73.91, label: "73.91", cls: "neutral", gradient: "linear-gradient(90deg,#22c55e,#f59e0b)" },
       note: { text: "Price well above both EMAs — EMA(9)=25,938 / EMA(21)=25,889. Has cleared the PDHigh (25,969.25) and extended. RSI 73.91 elevated but not yet extreme — momentum supporting continuation on the 15m.", cls: "" },
     },
