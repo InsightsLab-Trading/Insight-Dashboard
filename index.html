@@ -3,761 +3,760 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insight 2.0 — NQ Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Market Analysis Dashboard</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#05080f;--c1:#090e1a;--c2:#0d1424;--c3:#111a2e;
-  --b1:#182038;--b2:#1e2a46;
-  --t1:#e2e8f4;--t2:#7a8fa8;--t3:#3d5268;
-  --acc:#06b6d4;--acc2:rgba(6,182,212,.1);
-  --bull:#10b981;--bull2:rgba(16,185,129,.1);--bull3:rgba(16,185,129,.22);
-  --bear:#ef4444;--bear2:rgba(239,68,68,.1);--bear3:rgba(239,68,68,.22);
-  --warn:#f59e0b;--warn2:rgba(245,158,11,.1);
-  --purple:#a78bfa;--purple2:rgba(167,139,250,.1);
-  --r:5px;--g:8px
-}
-body{background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.5;min-height:100vh}
-.mono{font-family:'JetBrains Mono',monospace}
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: #1e1e2e;
+    --accent: #4f8ef7;
+    --accent2: #7c6af7;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --dim: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header-left .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .timestamp {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.25);
+    color: var(--green);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-/* ── LOADER ── */
-#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:10px;transition:opacity .35s}
-#loader.gone{opacity:0;pointer-events:none}
-.ld-ring{width:32px;height:32px;border:2px solid var(--b1);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite}
-.ld-txt{color:var(--t3);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
-@keyframes spin{to{transform:rotate(360deg)}}
+  .grid { display: grid; gap: 16px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+  .col-span-2 { grid-column: span 2; }
+  .col-span-3 { grid-column: span 3; }
+  .col-span-4 { grid-column: span 4; }
 
-/* ── HEADER ── */
-header{position:sticky;top:0;z-index:50;background:rgba(5,8,15,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--b1)}
-.hdr{display:flex;align-items:center;gap:8px;padding:8px 14px;flex-wrap:wrap}
-.brand{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;color:var(--acc);letter-spacing:.28em;text-transform:uppercase}
-.vl{width:1px;height:14px;background:var(--b1)}
-.inst{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700}
-.contract-chip{background:var(--c2);border:1px solid var(--b1);padding:1px 7px;border-radius:3px;font-size:9.5px;color:var(--t3)}
-.sess-badge{padding:2px 8px;border-radius:3px;font-size:9.5px;font-weight:600;letter-spacing:.04em}
-.sb-open{background:var(--bull2);color:var(--bull);border:1px solid rgba(16,185,129,.25)}
-.sb-ph{background:var(--acc2);color:var(--acc);border:1px solid rgba(6,182,212,.25)}
-.sb-dz{background:var(--warn2);color:var(--warn);border:1px solid rgba(245,158,11,.25)}
-.sb-pre{background:var(--c2);color:var(--t2);border:1px solid var(--b1)}
-.hspace{flex:1}
-.price-big{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700}
-.ts{font-size:9.5px;color:var(--t3);font-family:'JetBrains Mono',monospace}
-.btn{background:var(--c2);border:1px solid var(--b1);color:var(--t3);padding:3px 9px;border-radius:var(--r);cursor:pointer;font-size:10.5px;transition:.12s}
-.btn:hover{color:var(--acc);border-color:var(--acc)}
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card-sm { padding: 14px 16px; }
+  .card-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
 
-/* ── DECISION BAR ── */
-.dec-bar{display:flex;align-items:center;gap:12px;padding:8px 14px;border-bottom:1px solid var(--b1);flex-wrap:wrap}
-.dec-pill{padding:6px 24px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.18em;flex-shrink:0}
-.d-execute{background:var(--bull2);color:var(--bull);border:1px solid var(--bull);animation:glow 3s ease-in-out infinite}
-.d-wait{background:var(--warn2);color:var(--warn);border:1px solid var(--warn)}
-.d-skip{background:var(--bear2);color:var(--bear);border:1px solid var(--bear)}
-@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.25)}50%{box-shadow:0 0 10px 2px rgba(16,185,129,.12)}}
-.dec-score-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;min-width:44px}
-.dec-score-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;line-height:1}
-.dec-score-lbl{font-size:8.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--t3);margin-top:1px}
-.dec-narrative{flex:1;font-size:11.5px;color:var(--t2);line-height:1.6;border-left:2px solid var(--b1);padding-left:12px;min-width:200px}
-.dec-flags{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0}
-.rflag{padding:2px 8px;border-radius:3px;font-size:9.5px;font-weight:600}
-.rf-warn{background:var(--warn2);color:var(--warn);border:1px solid rgba(245,158,11,.25)}
-.rf-stop{background:var(--bear2);color:var(--bear);border:1px solid rgba(239,68,68,.25)}
-.rf-ok{background:var(--bull2);color:var(--bull);border:1px solid rgba(16,185,129,.25)}
+  /* Stat cards */
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .stat-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .neutral { color: var(--yellow); }
 
-/* ── NEWS STRIP ── */
-.news-strip{background:var(--c1);border-bottom:1px solid var(--b1);padding:5px 14px;display:flex;align-items:center;gap:10px;overflow-x:auto;white-space:nowrap}
-.news-strip::-webkit-scrollbar{height:3px}
-.news-strip::-webkit-scrollbar-track{background:transparent}
-.news-strip::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
-.ns-label{font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:var(--t3);font-family:'JetBrains Mono',monospace;flex-shrink:0}
-.ns-event{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:3px;font-size:10.5px;flex-shrink:0}
-.ns-high{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);color:var(--t1)}
-.ns-med{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.18);color:var(--t2)}
-.ns-low{background:var(--c2);border:1px solid var(--b1);color:var(--t3)}
-.ns-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.ns-dot.high{background:var(--bear)}.ns-dot.med{background:var(--warn)}.ns-dot.low{background:var(--t3)}
-.ns-passed{opacity:.4}
-.ns-time{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--t3)}
-.ns-empty{font-size:10.5px;color:var(--t3);font-style:italic}
+  /* Signal badge */
+  .signal {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .signal-bull { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .signal-bear { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+  .signal-warn { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
+  .signal-neut { background: rgba(100,116,139,0.12); color: var(--dim); border: 1px solid rgba(100,116,139,0.2); }
 
-/* ── LAYOUT ── */
-.main{display:grid;grid-template-columns:1fr 320px;gap:var(--g);padding:var(--g);max-width:1760px;margin:0 auto}
-@media(max-width:1080px){.main{grid-template-columns:1fr}}
-.col-l{display:flex;flex-direction:column;gap:var(--g)}
-.col-r{display:flex;flex-direction:column;gap:var(--g)}
+  /* Timeframe table */
+  .tf-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .tf-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .tf-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .tf-price {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .tf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .tf-row:last-child { border-bottom: none; }
+  .tf-key { color: var(--muted); }
+  .tf-val { font-weight: 500; }
 
-/* ── CARD ── */
-.card{background:var(--c1);border:1px solid var(--b1);border-radius:var(--r);padding:11px}
-.ctitle{font-size:8.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);margin-bottom:9px;display:flex;align-items:center;gap:5px}
-.ct-dot{width:4px;height:4px;border-radius:50%;background:var(--acc)}
-.null-txt{color:var(--t3);font-size:11px;font-style:italic}
+  /* RSI bar */
+  .rsi-bar-wrap { margin-top: 8px; }
+  .rsi-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    position: relative;
+    margin-top: 4px;
+  }
+  .rsi-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+  .rsi-label { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-/* ── REGIME ── */
-.regime-card{border-radius:var(--r);padding:11px;border:1px solid var(--b1);border-left:3px solid var(--b1)}
-.rc-bull{background:linear-gradient(135deg,var(--c1),rgba(8,24,16,.9));border-left-color:var(--bull)}
-.rc-bear{background:linear-gradient(135deg,var(--c1),rgba(24,8,8,.9));border-left-color:var(--bear)}
-.rc-ob{background:linear-gradient(135deg,var(--c1),rgba(24,16,4,.9));border-left-color:var(--warn)}
-.rc-os{background:linear-gradient(135deg,var(--c1),rgba(16,8,24,.9));border-left-color:var(--purple)}
-.rc-vol{background:linear-gradient(135deg,var(--c1),rgba(24,12,4,.9));border-left-color:#fb923c}
-.rc-chop{border-left-color:var(--t3)}
-.regime-name{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.05em;margin-bottom:5px}
-.conf-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
-.conf-bg{flex:1;height:4px;background:var(--b1);border-radius:2px;overflow:hidden}
-.conf-fill{height:100%;border-radius:2px;transition:width .4s}
-.conf-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;white-space:nowrap}
-.regime-reason{font-size:11px;color:var(--t2);line-height:1.6}
-.regime-change{display:inline-block;background:rgba(245,158,11,.12);color:var(--warn);border:1px solid rgba(245,158,11,.25);padding:1px 7px;border-radius:3px;font-size:9px;font-weight:600;margin-left:6px;vertical-align:middle}
+  /* Index table */
+  .idx-table { width: 100%; border-collapse: collapse; }
+  .idx-table th {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .idx-table td {
+    padding: 7px 8px;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+  }
+  .idx-table tr:last-child td { border-bottom: none; }
+  .idx-table .name { color: var(--dim); font-weight: 500; }
+  .idx-table .price { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .idx-table .chg { font-weight: 600; font-variant-numeric: tabular-nums; }
 
-/* ── EMA TABLE ── */
-.ema-tbl{width:100%;border-collapse:collapse}
-.ema-tbl th{font-size:8.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);padding:3px 7px;text-align:left;border-bottom:1px solid var(--b1)}
-.ema-tbl td{padding:4px 7px;font-family:'JetBrains Mono',monospace;font-size:11px;border-bottom:1px solid rgba(255,255,255,.025)}
-.ema-tbl tr:last-child td{border-bottom:none}
-.row-bull{background:rgba(16,185,129,.025)}.row-bear{background:rgba(239,68,68,.025)}
-.bias-tag{display:inline-block;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:600;font-family:'Inter',sans-serif}
-.bt-bull{background:var(--bull2);color:var(--bull)}.bt-bear{background:var(--bear2);color:var(--bear)}.bt-n{background:rgba(100,116,139,.1);color:var(--t3)}
+  /* Bar chart for sectors */
+  .sector-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+  }
+  .sector-row:last-child { border-bottom: none; }
+  .sector-name { width: 130px; font-size: 11px; color: var(--dim); flex-shrink: 0; }
+  .bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .sector-val { width: 40px; text-align: right; font-size: 11px; font-weight: 600; }
 
-/* ── RSI BLOCKS ── */
-.rsi-row{display:flex;gap:6px;margin-top:7px}
-.rsi-blk{flex:1;background:var(--c2);border:1px solid var(--b1);border-radius:4px;padding:7px;text-align:center}
-.rsi-tf{font-size:8.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:2px}
-.rsi-num{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;line-height:1}
-.rsi-zone{font-size:8.5px;color:var(--t3);margin-top:1px}
-.rsi-flag{font-size:9px;font-weight:600;color:var(--warn);margin-top:2px;padding:1px 5px;background:var(--warn2);border-radius:2px;display:inline-block}
+  /* Key levels */
+  .level-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+    font-size: 12px;
+  }
+  .level-row:last-child { border-bottom: none; }
+  .level-label { color: var(--muted); font-size: 11px; }
+  .level-val { font-weight: 700; font-variant-numeric: tabular-nums; }
 
-/* ── VOL CHIPS ── */
-.vol-row{display:flex;gap:6px;margin-top:7px}
-.vol-chip{flex:1;background:var(--c2);border:1px solid var(--b1);border-radius:4px;padding:6px 7px}
-.vc-lbl{font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:2px}
-.vc-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600}
-.vs-tight{color:var(--bull)}.vs-normal{color:var(--t2)}.vs-elevated{color:var(--warn)}.vs-extreme{color:var(--bear)}
+  /* Bias box */
+  .bias-block {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .bias-title { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .bias-text { font-size: 13px; line-height: 1.6; color: var(--dim); }
 
-/* ── 2-COL ── */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.vp-row{display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
-.vp-row:last-child{border-bottom:none}
-.vp-lbl{color:var(--t3);font-size:9.5px}
-.vp-price{font-family:'JetBrains Mono',monospace;font-weight:600}
+  /* Mini heatmap */
+  .heat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .heat-cell {
+    border-radius: 6px;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .heat-cell .ticker { font-size: 11px; font-weight: 700; }
+  .heat-cell .pct { font-size: 10px; margin-top: 1px; }
 
-/* ── LEVELS ── */
-.levels-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
-.lev-row{display:flex;align-items:center;justify-content:space-between;padding:4px 7px;background:var(--c2);border:1px solid var(--b1);border-radius:3px}
-.lev-lbl{font-size:9.5px;color:var(--t3)}
-.lev-v{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600}
-.lev-htf{border-color:rgba(6,182,212,.2);background:rgba(6,182,212,.035)}
+  /* Alert bar */
+  .alert-bar {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--yellow);
+    margin-bottom: 16px;
+  }
+  .alert-icon { font-size: 14px; }
 
-/* ── OPPORTUNITIES ── */
-.opp-card{background:var(--c2);border:1px solid var(--b1);border-radius:var(--r);padding:11px;border-left:3px solid var(--b1);margin-bottom:7px}
-.opp-card:last-child{margin-bottom:0}
-.opp-card.long{border-left-color:var(--bull)}.opp-card.short{border-left-color:var(--bear)}
-.opp-hdr{display:flex;align-items:center;gap:7px;margin-bottom:8px}
-.dir-pill{padding:2px 9px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.06em}
-.dp-long{background:var(--bull2);color:var(--bull);border:1px solid rgba(16,185,129,.25)}
-.dp-short{background:var(--bear2);color:var(--bear);border:1px solid rgba(239,68,68,.25)}
-.conv-badge{padding:1px 6px;border-radius:3px;font-size:9.5px;font-weight:600}
-.cb-high{background:var(--bull2);color:var(--bull)}.cb-med{background:var(--warn2);color:var(--warn)}.cb-low{background:rgba(100,116,139,.1);color:var(--t3)}
-.opp-trigger{font-size:11px;color:var(--t1);line-height:1.55;margin-bottom:9px;padding:7px;background:var(--c1);border-radius:3px;border:1px solid var(--b1)}
-.lvl-strip{display:flex;gap:5px;margin-bottom:9px;flex-wrap:wrap}
-.ls-it{flex:1;min-width:55px;text-align:center;padding:5px;background:var(--c1);border:1px solid var(--b1);border-radius:3px}
-.ls-lbl{font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:1px}
-.ls-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
-.ls-entry .ls-v{color:var(--acc)}.ls-stop .ls-v{color:var(--bear)}.ls-t1 .ls-v{color:var(--bull)}.ls-t2 .ls-v{color:rgba(16,185,129,.65)}.ls-rr .ls-v{color:var(--t1)}
-.conf-checks{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
-.cc{display:flex;align-items:center;gap:3px;padding:1px 6px;border-radius:3px;font-size:9.5px}
-.cc-ok{background:var(--bull2);color:var(--bull)}.cc-no{background:rgba(100,116,139,.06);color:var(--t3)}
-.opp-notes{font-size:10.5px;color:var(--t2);line-height:1.5;padding-top:7px;border-top:1px solid var(--b1)}
+  /* Divider */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
 
-/* ── SCENARIOS ── */
-.scen-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-@media(max-width:700px){.scen-grid{grid-template-columns:1fr}}
-.scen{border-radius:4px;padding:9px;border:1px solid transparent}
-.scen-bull{background:rgba(16,185,129,.04);border-color:rgba(16,185,129,.12)}
-.scen-bear{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.12)}
-.scen-chop{background:rgba(100,116,139,.04);border-color:rgba(100,116,139,.1)}
-.scen-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.sn{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
-.sn-bull{color:var(--bull)}.sn-bear{color:var(--bear)}.sn-chop{color:var(--t3)}
-.sp{font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700}
-.sp-bull{color:var(--bull)}.sp-bear{color:var(--bear)}.sp-chop{color:var(--t3)}
-.scen-bar{height:2px;border-radius:2px;margin-bottom:6px}
-.scen-line{display:flex;gap:5px;font-size:10.5px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.03)}
-.scen-line:last-child{border-bottom:none}
-.sl-k{color:var(--t3);white-space:nowrap;min-width:50px;font-size:9.5px}
-.sl-v{color:var(--t2);flex:1}
-.inv-block{margin-top:7px;padding:7px 9px;background:var(--bear2);border:1px solid rgba(239,68,68,.18);border-radius:3px;font-size:10.5px;color:var(--bear);line-height:1.5}
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-/* ── BIG TRADES ── */
-.bt-item{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03)}
-.bt-item:last-child{border-bottom:none}
-.bt-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0;border:2px solid}
-.bt-dot.buy{background:rgba(16,185,129,.18);border-color:var(--bull)}.bt-dot.sell{background:rgba(239,68,68,.18);border-color:var(--bear)}
-.bt-price{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;min-width:52px}
-.bt-note{flex:1;font-size:10.5px;color:var(--t2)}
-.bt-sz{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--t3)}
+  /* Summary bullets */
+  .bullets { list-style: none; }
+  .bullets li {
+    display: flex;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 12px;
+    color: var(--dim);
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+    line-height: 1.5;
+  }
+  .bullets li:last-child { border-bottom: none; }
+  .bullets li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
 
-/* ── SCORING ── */
-.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
-.score-it{background:var(--c2);border:1px solid var(--b1);border-radius:3px;padding:6px 8px}
-.si-lbl{font-size:8.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:3px}
-.si-bar-bg{height:3px;background:var(--b1);border-radius:2px;overflow:hidden;margin-bottom:3px}
-.si-bar{height:100%;border-radius:2px;transition:width .4s}
-.si-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600}
+  /* Correlation mini table */
+  .corr-table { width: 100%; border-collapse: collapse; }
+  .corr-table td {
+    padding: 5px 8px;
+    font-size: 11px;
+    border-bottom: 1px solid rgba(30,30,46,0.4);
+  }
+  .corr-table tr:last-child td { border-bottom: none; }
+  .corr-pair { color: var(--muted); }
+  .corr-val { font-weight: 700; color: var(--accent); text-align: right; }
 
-/* ── MACRO ── */
-.tone-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:3px;font-size:9.5px;font-weight:600;margin-bottom:7px}
-.mt-on{background:var(--bull2);color:var(--bull);border:1px solid rgba(16,185,129,.25)}
-.mt-off{background:var(--bear2);color:var(--bear);border:1px solid rgba(239,68,68,.25)}
-.mt-mixed{background:var(--warn2);color:var(--warn);border:1px solid rgba(245,158,11,.25)}
-.mac-row{display:flex;align-items:center;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
-.mac-row:last-child{border-bottom:none}
-.mac-k{color:var(--t3);font-size:9.5px;min-width:65px}
-.mac-v{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500}
-.mac-note{font-size:11px;color:var(--t2);line-height:1.6;margin-top:7px;padding-top:7px;border-top:1px solid var(--b1)}
+  /* Volatility gauge */
+  .vol-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+  }
+  .vol-row:last-child { border-bottom: none; }
 
-/* ── CONTEXT / WATCH ── */
-.thesis-blk{background:rgba(6,182,212,.05);border:1px solid rgba(6,182,212,.18);border-radius:3px;padding:7px 9px;font-size:11px;color:var(--t1);line-height:1.6;margin-bottom:7px}
-.watch-it{display:flex;gap:7px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:10.5px;align-items:flex-start}
-.watch-it:last-child{border-bottom:none}
-.watch-dot{width:4px;height:4px;border-radius:50%;background:var(--warn);flex-shrink:0;margin-top:5px}
-.watch-txt{color:var(--t2);flex:1;line-height:1.5}
-
-/* ── RISK STRIP ── */
-.risk-strip{display:flex;gap:5px;flex-wrap:wrap}
-.rk-chip{flex:1;min-width:80px;background:var(--c2);border:1px solid var(--b1);border-radius:3px;padding:6px 8px;text-align:center}
-.rk-lbl{font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:2px}
-.rk-v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
-.rk-full{color:var(--bull)}.rk-half{color:var(--warn)}.rk-skip{color:var(--bear)}
-
-/* ── CHART ── */
-.chart-wrap{background:var(--c1);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden}
-.chart-wrap img{width:100%;display:block}
-.chart-ph{padding:48px;text-align:center;color:var(--t3);font-size:11px}
-
-/* ── NEWS PANEL ── */
-.news-panel .news-event-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03)}
-.news-panel .news-event-row:last-child{border-bottom:none}
-.ner-time{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--t3);white-space:nowrap;min-width:42px}
-.ner-imp{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
-.ner-imp.high{background:var(--bear)}.ner-imp.med{background:var(--warn)}.ner-imp.low{background:var(--t3)}
-.ner-body{flex:1}
-.ner-name{font-size:11px;color:var(--t1);margin-bottom:1px}
-.ner-detail{font-size:10px;color:var(--t3)}
-.ner-passed{opacity:.35}
-.news-summary{font-size:11px;color:var(--t2);line-height:1.65;padding:8px;background:var(--c2);border-radius:3px;border:1px solid var(--b1);margin-bottom:8px}
-
-/* ── UTIL ── */
-.sep{width:1px;background:var(--b1);flex-shrink:0}
+  @media (max-width: 900px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .tf-grid { grid-template-columns: repeat(2, 1fr); }
+  }
 </style>
 </head>
 <body>
 
-<div id="loader"><div class="ld-ring"></div><div class="ld-txt">Loading analysis</div></div>
-
-<!-- HEADER -->
-<header>
-  <div class="hdr">
-    <span class="brand">Insight 2.0</span>
-    <div class="vl"></div>
-    <span class="inst mono" id="hInst">NQ</span>
-    <span class="contract-chip" id="hContract">—</span>
-    <span class="sess-badge sb-pre" id="hSess">—</span>
-    <div class="vl"></div>
-    <span class="price-big mono" id="hPrice">—</span>
-    <div class="hspace"></div>
-    <span class="ts" id="hTime">—</span>
-    <button class="btn" onclick="loadData()">↺ Refresh</button>
+<div class="header">
+  <div class="header-left">
+    <h1>Market Analysis Dashboard</h1>
+    <div class="sub">ENQH26 · Equities · Macro · April 14, 2026</div>
+    <div class="status-pill"><span class="dot"></span> Live Analysis</div>
   </div>
-  <!-- DECISION BAR -->
-  <div class="dec-bar">
-    <div class="dec-pill d-wait" id="decPill">WAIT</div>
-    <div class="dec-score-wrap">
-      <div class="dec-score-num mono" id="decScore" style="color:var(--warn)">—</div>
-      <div class="dec-score-lbl">Score</div>
-    </div>
-    <div class="dec-narrative" id="decNarrative">Loading...</div>
-    <div class="dec-flags" id="decFlags"></div>
+  <div class="timestamp">
+    Generated: April 14, 2026<br>
+    Instrument: NQ Futures (ENQH26)<br>
+    Session: US Regular Hours
   </div>
-</header>
-
-<!-- NEWS STRIP (scrollable ticker) -->
-<div class="news-strip" id="newsStrip">
-  <span class="ns-label">News</span>
-  <span class="ns-empty" id="nsEmpty">No events — run /analyze</span>
 </div>
 
-<!-- MAIN LAYOUT -->
-<div class="main">
-  <div class="col-l">
+<!-- Alert -->
+<div class="alert-bar">
+  <span class="alert-icon">⚠</span>
+  <span><strong>RSI Overbought Alert:</strong> 1H RSI at 78.26 and 4H RSI at 72.7 — price extended. Momentum strong but caution warranted at highs. Watch for consolidation or pullback.</span>
+</div>
 
-    <!-- CHART -->
-    <div class="chart-wrap" id="chartWrap">
-      <div class="chart-ph">No chart — place Live Chart.png in assets/ and run /analyze</div>
+<!-- Top stat row -->
+<div class="grid grid-4" style="margin-bottom:16px;">
+  <div class="card card-sm">
+    <div class="card-title">NQ Futures</div>
+    <div class="stat-value">25,917</div>
+    <div class="stat-label">ENQH26 Last Price</div>
+    <div class="stat-change up">▲ Strong Uptrend</div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Market Bias</div>
+    <div style="margin-top:4px;">
+      <div class="signal signal-bull" style="margin-bottom:8px;">● Bullish</div>
+      <div style="font-size:11px; color:var(--muted); line-height:1.5;">All timeframes aligned. Price above all EMAs. Broad market risk-on.</div>
+    </div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Volatility</div>
+    <div class="stat-value neutral">18.46</div>
+    <div class="stat-label">VIX Index</div>
+    <div class="stat-change down">▼ −3.45% · Contracting</div>
+  </div>
+  <div class="card card-sm">
+    <div class="card-title">Breadth</div>
+    <div style="margin-top:2px;">
+      <div style="font-size:11px; color:var(--muted); margin-bottom:6px;">Index Performance (Today)</div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">IWM</span><span class="up" style="font-weight:700">+1.42%</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">QQQ</span><span class="up" style="font-weight:700">+1.05%</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">SPY</span><span class="up" style="font-weight:700">+0.99%</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:12px;"><span style="color:var(--dim)">DIA</span><span class="up" style="font-weight:700">+0.62%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENQH26 Multi-Timeframe Analysis -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="card-title">ENQH26 · Multi-Timeframe Analysis</div>
+  <div class="tf-grid">
+
+    <!-- 15m -->
+    <div class="tf-card">
+      <div class="tf-label">15 Minute</div>
+      <div class="tf-price">25,917</div>
+      <div style="margin: 8px 0 10px;">
+        <span class="signal signal-warn">Consolidating</span>
+      </div>
+      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,919</span></div>
+      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">25,966</span></div>
+      <div class="tf-row"><span class="tf-key">PDHigh</span><span class="tf-val up">25,969.25</span></div>
+      <div class="tf-row"><span class="tf-key">PDLow</span><span class="tf-val down">24,904.50</span></div>
+      <div class="rsi-bar-wrap">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+          <span>RSI(14)</span><span class="neutral">65.70</span>
+        </div>
+        <div class="rsi-track">
+          <div class="rsi-fill" style="width:65.7%;background:linear-gradient(90deg,#22c55e,#f59e0b);"></div>
+        </div>
+        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">Price below both EMAs. Sideways chop near highs. Volume cluster resistance above.</div>
     </div>
 
-    <!-- TRADE OPPORTUNITIES -->
-    <div class="card" id="oppsCard">
-      <div class="ctitle"><div class="ct-dot"></div>Trade Opportunities</div>
-      <div class="null-txt" id="oppsInner">No setups identified</div>
+    <!-- 1H -->
+    <div class="tf-card">
+      <div class="tf-label">1 Hour</div>
+      <div class="tf-price">25,917</div>
+      <div style="margin: 8px 0 10px;">
+        <span class="signal signal-warn">Overbought</span>
+      </div>
+      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,621</span></div>
+      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">25,682</span></div>
+      <div class="tf-row"><span class="tf-key">PDHigh</span><span class="tf-val up">25,599.25</span></div>
+      <div class="tf-row"><span class="tf-key">PDLow</span><span class="tf-val down">24,904.50</span></div>
+      <div class="rsi-bar-wrap">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+          <span>RSI(14)</span><span class="down">78.26</span>
+        </div>
+        <div class="rsi-track">
+          <div class="rsi-fill" style="width:78.26%;background:linear-gradient(90deg,#22c55e,#ef4444);"></div>
+        </div>
+        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--red);line-height:1.5;">⚠ RSI overbought. Price extended ~296pts above EMA21. Elevated pullback risk.</div>
     </div>
 
-    <!-- SCENARIOS + INVALIDATION -->
-    <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>Scenarios</div>
-      <div class="scen-grid" id="scenGrid"><div class="null-txt">Loading...</div></div>
-      <div id="invBlock"></div>
+    <!-- 4H -->
+    <div class="tf-card">
+      <div class="tf-label">4 Hour</div>
+      <div class="tf-price">25,917</div>
+      <div style="margin: 8px 0 10px;">
+        <span class="signal signal-bull">Strong Bull</span>
+      </div>
+      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,622</span></div>
+      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">25,379</span></div>
+      <div class="tf-row"><span class="tf-key">Week High</span><span class="tf-val up">25,917.25</span></div>
+      <div class="tf-row"><span class="tf-key">Week Mid</span><span class="tf-val neutral">25,436.88</span></div>
+      <div class="tf-row"><span class="tf-key">Week Low</span><span class="tf-val down">24,904.50</span></div>
+      <div class="rsi-bar-wrap">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+          <span>RSI(14)</span><span class="neutral">72.70</span>
+        </div>
+        <div class="rsi-track">
+          <div class="rsi-fill" style="width:72.7%;background:linear-gradient(90deg,#22c55e,#f59e0b);"></div>
+        </div>
+        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">Impulse leg from week low +1,013pts. Testing week high. Momentum still strong.</div>
+    </div>
+
+    <!-- 1D -->
+    <div class="tf-card">
+      <div class="tf-label">Daily</div>
+      <div class="tf-price">25,077</div>
+      <div style="margin: 8px 0 10px;">
+        <span class="signal signal-bull">Uptrend</span>
+      </div>
+      <div class="tf-row"><span class="tf-key">EMA(9)</span><span class="tf-val">25,077</span></div>
+      <div class="tf-row"><span class="tf-key">EMA(21)</span><span class="tf-val">24,774</span></div>
+      <div class="tf-row"><span class="tf-key">Month High</span><span class="tf-val up">25,969.25</span></div>
+      <div class="tf-row"><span class="tf-key">Month Mid</span><span class="tf-val neutral">24,617.62</span></div>
+      <div class="tf-row"><span class="tf-key">Month Low</span><span class="tf-val down">23,666.00</span></div>
+      <div class="rsi-bar-wrap">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">
+          <span>RSI(14)</span><span class="up">~62</span>
+        </div>
+        <div class="rsi-track">
+          <div class="rsi-fill" style="width:62%;background:linear-gradient(90deg,#22c55e,#4f8ef7);"></div>
+        </div>
+        <div class="rsi-label"><span>0</span><span>30</span><span>50</span><span>70</span><span>100</span></div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">V-shape recovery from Feb lows ~23,400. EMA stack bullish. Price at month highs.</div>
     </div>
 
   </div>
-  <div class="col-r">
+</div>
 
-    <!-- CONTEXT CHAIN (prior run) -->
-    <div class="card" id="ctxCard" style="display:none">
-      <div class="ctitle" style="color:var(--warn)"><div class="ct-dot" style="background:var(--warn)"></div>Watching from last run</div>
-      <div id="thesisEl"></div>
-      <div id="watchEl"></div>
+<!-- Key Levels + Index Performance row -->
+<div class="grid grid-3" style="margin-bottom:16px;">
+
+  <!-- Key Levels -->
+  <div class="card">
+    <div class="card-title">Key Price Levels · ENQH26</div>
+    <div class="level-row">
+      <span class="level-label">Month High / Resistance</span>
+      <span class="level-val down">25,969.25</span>
     </div>
+    <div class="level-row">
+      <span class="level-label">Current Price</span>
+      <span class="level-val">25,917.00</span>
+    </div>
+    <div class="level-row">
+      <span class="level-label">PDHigh</span>
+      <span class="level-val neutral">25,599.25</span>
+    </div>
+    <div class="level-row">
+      <span class="level-label">Daily EMA(9)</span>
+      <span class="level-val up">25,077.57</span>
+    </div>
+    <div class="level-row">
+      <span class="level-label">Month Middle</span>
+      <span class="level-val up">24,617.62</span>
+    </div>
+    <div class="level-row">
+      <span class="level-label">Daily EMA(21)</span>
+      <span class="level-val up">24,774.49</span>
+    </div>
+    <div class="level-row">
+      <span class="level-label">Week Low / Support</span>
+      <span class="level-val up">24,904.50</span>
+    </div>
+    <div class="level-row">
+      <span class="level-label">Month Low</span>
+      <span class="level-val up">23,666.00</span>
+    </div>
+  </div>
 
-    <!-- REGIME -->
-    <div class="regime-card rc-chop" id="regCard">
-      <div class="ctitle" style="margin-bottom:7px"><div class="ct-dot"></div>Regime</div>
-      <div class="regime-name" id="regName">—</div>
-      <div class="conf-row">
-        <div class="conf-bg"><div class="conf-fill" id="confFill" style="width:0;background:var(--acc)"></div></div>
-        <div class="conf-num" id="confNum">—</div>
+  <!-- Index Performance -->
+  <div class="card">
+    <div class="card-title">US Index Performance</div>
+    <table class="idx-table">
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Price</th>
+          <th>Chg</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="name">S&P 500</td><td class="price">5,950.44</td><td class="chg up">+0.93%</td></tr>
+        <tr><td class="name">Nasdaq 100</td><td class="price">25,745.52</td><td class="chg up">+1.03%</td></tr>
+        <tr><td class="name">Nasdaq Comp.</td><td class="price">23,555.89</td><td class="chg up">+1.01%</td></tr>
+        <tr><td class="name">Dow Jones</td><td class="price">48,462.21</td><td class="chg up">+0.51%</td></tr>
+        <tr><td class="name">Russell 2000</td><td class="price">2,097.89</td><td class="chg up">+1.03%</td></tr>
+        <tr><td class="name">Dollar Index</td><td class="price">$97.91</td><td class="chg down">−0.47%</td></tr>
+      </tbody>
+    </table>
+    <hr class="divider" style="margin:10px 0;">
+    <div class="card-title" style="margin-bottom:8px;">Bond Yields</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+      <div style="text-align:center;"><div style="font-size:11px;color:var(--muted)">2Y</div><div style="font-weight:700;font-size:13px">3.78%</div><div style="font-size:10px;color:var(--red)">−0.03</div></div>
+      <div style="text-align:center;"><div style="font-size:11px;color:var(--muted)">10Y</div><div style="font-weight:700;font-size:13px">4.30%</div><div style="font-size:10px;color:var(--red)">−0.01</div></div>
+      <div style="text-align:center;"><div style="font-size:11px;color:var(--muted)">30Y</div><div style="font-weight:700;font-size:13px">4.90%</div><div style="font-size:10px;color:var(--red)">+0.01</div></div>
+    </div>
+  </div>
+
+  <!-- Volatility & Global -->
+  <div class="card">
+    <div class="card-title">Volatility & Global Markets</div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">VIX</span>
+      <span><span style="font-weight:700">18.46</span> <span class="down" style="font-size:11px">−3.45%</span></span>
+    </div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">NASDAQ VIX</span>
+      <span><span style="font-weight:700">22.41</span> <span class="down" style="font-size:11px">−3.57%</span></span>
+    </div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">MOVE Bond Vol</span>
+      <span><span style="font-weight:700">72.13</span> <span class="down" style="font-size:11px">−3.64%</span></span>
+    </div>
+    <hr class="divider" style="margin:8px 0;">
+    <div class="card-title" style="margin-bottom:8px;">Global Indices</div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">Euro Stoxx 50</span>
+      <span class="up" style="font-weight:600">+1.19%</span>
+    </div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">DAX</span>
+      <span class="up" style="font-weight:600">+1.12%</span>
+    </div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">Nikkei 225</span>
+      <span class="up" style="font-weight:600">+2.33%</span>
+    </div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">Hang Seng</span>
+      <span class="up" style="font-weight:600">+0.80%</span>
+    </div>
+    <div class="vol-row">
+      <span style="color:var(--muted)">IBEX 35</span>
+      <span class="up" style="font-weight:600">+1.08%</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Sector Heatmap + Correlations -->
+<div class="grid grid-2-1" style="margin-bottom:16px;">
+
+  <div class="card">
+    <div class="card-title">Sector Performance · S&P 500</div>
+    <div class="sector-row">
+      <span class="sector-name">Consumer Cyclical</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+      <span class="sector-val up">+2.06%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Communication Svcs</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:88%;background:var(--green);"></div></div>
+      <span class="sector-val up">+1.82%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Technology</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:75%;background:var(--green);"></div></div>
+      <span class="sector-val up">+1.55%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Financials</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:58%;background:var(--green);"></div></div>
+      <span class="sector-val up">+1.19%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Real Estate</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:50%;background:var(--green);"></div></div>
+      <span class="sector-val up">+1.02%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Health Care</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:40%;background:var(--green);"></div></div>
+      <span class="sector-val up">+0.83%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Industrials</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:30%;background:var(--green);"></div></div>
+      <span class="sector-val up">+0.26%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Materials</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:24%;background:rgba(245,158,11,0.7);"></div></div>
+      <span class="sector-val down">−0.55%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Utilities</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:20%;background:var(--red);opacity:0.7;"></div></div>
+      <span class="sector-val down">−0.61%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Consumer Staples</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:22%;background:var(--red);opacity:0.7;"></div></div>
+      <span class="sector-val down">−0.62%</span>
+    </div>
+    <div class="sector-row">
+      <span class="sector-name">Energy</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:55%;background:var(--red);"></div></div>
+      <span class="sector-val down">−2.62%</span>
+    </div>
+    <hr class="divider" style="margin:12px 0 10px;">
+    <div class="card-title" style="margin-bottom:8px;">Notable Movers</div>
+    <div class="heat-grid">
+      <div class="heat-cell" style="background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.3);">
+        <div class="ticker up">AMZN</div><div class="pct up">+3.98%</div>
       </div>
-      <div class="regime-reason" id="regReason">—</div>
+      <div class="heat-cell" style="background:rgba(34,197,94,0.18);border:1px solid rgba(34,197,94,0.3);">
+        <div class="ticker up">GOOG</div><div class="pct up">+3.11%</div>
+      </div>
+      <div class="heat-cell" style="background:rgba(34,197,94,0.16);border:1px solid rgba(34,197,94,0.3);">
+        <div class="ticker up">TSLA</div><div class="pct up">+3.16%</div>
+      </div>
+      <div class="heat-cell" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);">
+        <div class="ticker down">AAPL</div><div class="pct down">−0.17%</div>
+      </div>
+      <div class="heat-cell" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);">
+        <div class="ticker down">JPM</div><div class="pct down">−0.54%</div>
+      </div>
     </div>
+  </div>
 
-    <!-- MACRO -->
+  <!-- Right column: Correlations + Commodities + Crypto -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+
     <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>Macro Context</div>
-      <div id="macroInner"><div class="null-txt">No macro data</div></div>
-    </div>
-
-    <!-- NEWS DETAIL PANEL -->
-    <div class="card news-panel">
-      <div class="ctitle"><div class="ct-dot" style="background:var(--warn)"></div>Economic Events</div>
-      <div id="newsInner"><div class="null-txt">No events — include news in /analyze</div></div>
-    </div>
-
-    <!-- EMA + RSI + VOL -->
-    <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>EMA Stack</div>
-      <table class="ema-tbl">
-        <thead><tr><th>TF</th><th>EMA9</th><th>EMA21</th><th>Bias</th></tr></thead>
-        <tbody id="emaTbody"></tbody>
+      <div class="card-title">Index Correlations</div>
+      <table class="corr-table">
+        <tr><td class="corr-pair">SPY / QQQ</td><td class="corr-val">0.990</td></tr>
+        <tr><td class="corr-pair">SPY / DIA</td><td class="corr-val">0.981</td></tr>
+        <tr><td class="corr-pair">SPY / IWM</td><td class="corr-val">0.986</td></tr>
+        <tr><td class="corr-pair">QQQ / IWM</td><td class="corr-val">0.958</td></tr>
+        <tr><td class="corr-pair">QQQ / DIA</td><td class="corr-val">0.958</td></tr>
+        <tr><td class="corr-pair">DIA / IWM</td><td class="corr-val">0.984</td></tr>
       </table>
-      <div style="margin-top:10px">
-        <div class="ctitle" style="margin-bottom:0"><div class="ct-dot"></div>RSI (14)</div>
-        <div class="rsi-row" id="rsiRow"></div>
-      </div>
-      <div style="margin-top:10px">
-        <div class="ctitle" style="margin-bottom:0"><div class="ct-dot"></div>Volatility</div>
-        <div class="vol-row" id="volRow"></div>
-      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--muted);">All indices highly correlated — unified risk-on move.</div>
     </div>
 
-    <!-- VWAP + VOL PROFILE -->
     <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>VWAP &amp; Volume Profile</div>
-      <div class="two-col">
-        <div id="vwapCol"></div>
-        <div id="vpCol"></div>
-      </div>
+      <div class="card-title">Commodities & FX</div>
+      <div class="vol-row"><span style="color:var(--muted)">Crude Oil (WTI)</span><span><span style="font-weight:700">$91.29</span> <span class="down" style="font-size:11px">−7.86%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">Brent Crude</span><span><span style="font-weight:700">$94.85</span> <span class="down" style="font-size:11px">−4.54%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">Natural Gas</span><span><span style="font-weight:700">$2.00</span> <span class="down" style="font-size:11px">−2.48%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">Gold</span><span><span style="font-weight:700">$4,602.30</span> <span class="up" style="font-size:11px">+1.99%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">EUR/USD</span><span><span style="font-weight:700">$1.18</span> <span class="up" style="font-size:11px">+0.32%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">USD/JPY</span><span><span style="font-weight:700">¥158.78</span> <span class="down" style="font-size:11px">−0.40%</span></span></div>
     </div>
 
-    <!-- KEY LEVELS -->
     <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>Key Levels</div>
-      <div class="levels-grid" id="levelsGrid"></div>
-    </div>
-
-    <!-- BIG TRADES -->
-    <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>Big Trades (150ct+)</div>
-      <div id="btInner"><div class="null-txt">No signals</div></div>
-    </div>
-
-    <!-- SCORING -->
-    <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>Scoring</div>
-      <div class="score-grid" id="scoreGrid"></div>
-    </div>
-
-    <!-- RISK & SIZING -->
-    <div class="card">
-      <div class="ctitle"><div class="ct-dot"></div>Risk &amp; Sizing</div>
-      <div class="risk-strip" id="riskStrip"></div>
+      <div class="card-title">Crypto</div>
+      <div class="vol-row"><span style="color:var(--muted)">Bitcoin</span><span><span style="font-weight:700">$76,598</span> <span class="up" style="font-size:11px">+0.20%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">Ethereum</span><span><span style="font-weight:700">$2,337</span> <span class="down" style="font-size:11px">−1.41%</span></span></div>
+      <div class="vol-row"><span style="color:var(--muted)">Solana</span><span><span style="font-weight:700">$85.02</span> <span class="down" style="font-size:11px">−1.00%</span></span></div>
     </div>
 
   </div>
 </div>
 
-<script>
-/* ── helpers ── */
-const P = v => (v != null && v !== '') ? v : '—';
-const fmt = v => (v != null && v !== 0) ? Number(v).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2}) : '—';
-const fmtF = v => (v != null) ? Number(v).toFixed(1) : '—';
+<!-- Bias & Trade Thesis -->
+<div class="card">
+  <div class="card-title">Trade Thesis & Analytical Summary</div>
+  <div class="grid grid-3" style="gap:12px;">
 
-function cc(v) {
-  if (v >= 8) return 'var(--bull)';
-  if (v >= 6) return 'var(--acc)';
-  if (v >= 4) return 'var(--warn)';
-  return 'var(--bear)';
-}
-function rsiColor(v) {
-  if (v == null) return 'var(--t2)';
-  if (v > 70) return 'var(--bear)';
-  if (v < 30) return 'var(--purple)';
-  if (v > 55) return 'var(--bull)';
-  if (v < 45) return 'var(--bear)';
-  return 'var(--t1)';
-}
-function sessClass(s) {
-  if (!s) return 'sb-pre';
-  s = s.toLowerCase();
-  if (s.includes('open') || s.includes('morning')) return 'sb-open';
-  if (s.includes('power')) return 'sb-ph';
-  if (s.includes('dead') || s.includes('zone')) return 'sb-dz';
-  return 'sb-pre';
-}
-function regClass(n) {
-  if (!n) return '';
-  n = n.toUpperCase();
-  if (n.includes('BULL_TREND')) return 'rc-bull';
-  if (n.includes('BEAR_TREND')) return 'rc-bear';
-  if (n.includes('OB') || n.includes('OVERBOUGHT')) return 'rc-ob';
-  if (n.includes('OS') || n.includes('OVERSOLD')) return 'rc-os';
-  if (n.includes('HIGH_VOL') || n.includes('EXPANSION')) return 'rc-vol';
-  return 'rc-chop';
-}
-
-/* ── news strip builder ── */
-function buildNewsStrip(events) {
-  const strip = document.getElementById('newsStrip');
-  const empty = document.getElementById('nsEmpty');
-  if (!events || !events.length) { empty.style.display = ''; return; }
-  empty.style.display = 'none';
-
-  const impMap = { high: 'high', red: 'high', medium: 'med', orange: 'med', low: 'low', yellow: 'low' };
-
-  events.forEach(ev => {
-    const imp = impMap[(ev.impact || '').toLowerCase()] || 'low';
-    const passed = ev.passed === true;
-    const el = document.createElement('div');
-    el.className = `ns-event ns-${imp}${passed ? ' ns-passed' : ''}`;
-    el.innerHTML = `<div class="ns-dot ${imp}"></div><span class="ns-time">${P(ev.time)}</span><span>${P(ev.name)}</span>`;
-    strip.appendChild(el);
-  });
-}
-
-/* ── news detail panel ── */
-function buildNewsPanel(d) {
-  const el = document.getElementById('newsInner');
-  const events = d.news_events || [];
-  const summary = d.news_summary || '';
-
-  if (!events.length && !summary) {
-    el.innerHTML = '<div class="null-txt">No events loaded — include Grok news block in /analyze run</div>';
-    return;
-  }
-
-  let html = '';
-  if (summary) {
-    html += `<div class="news-summary">${summary}</div>`;
-  }
-
-  const impMap = { high: 'high', red: 'high', medium: 'med', orange: 'med', low: 'low', yellow: 'low' };
-  events.forEach(ev => {
-    const imp = impMap[(ev.impact || '').toLowerCase()] || 'low';
-    const passed = ev.passed === true;
-    html += `<div class="news-event-row${passed ? ' ner-passed' : ''}">
-      <span class="ner-time">${P(ev.time)}</span>
-      <div class="ner-imp ${imp}"></div>
-      <div class="ner-body">
-        <div class="ner-name">${P(ev.name)}${ev.currency ? ` <span style="color:var(--t3);font-size:9.5px">${ev.currency}</span>` : ''}</div>
-        ${ev.forecast || ev.previous ? `<div class="ner-detail">${ev.forecast ? 'F: ' + ev.forecast : ''}${ev.forecast && ev.previous ? ' · ' : ''}${ev.previous ? 'P: ' + ev.previous : ''}</div>` : ''}
+    <div>
+      <div class="bias-block">
+        <div class="bias-title">📈 Bull Case</div>
+        <div class="bias-text">All major indices up 0.6–1.4% on the day. VIX contracting to 18.46 (-3.45%) and MOVE Bond Vol declining confirm broad risk-on. NQ in strong uptrend — price above all EMAs on 1H/4H/1D. Recovery from Feb lows complete. Global markets (Nikkei +2.33%, DAX +1.12%) confirming the bid. Consumer Cyclical and Comm Services sectors leading — growth rotation intact.</div>
       </div>
-    </div>`;
-  });
-  el.innerHTML = html;
-}
-
-/* ── main render ── */
-function render(d) {
-  /* header */
-  document.getElementById('hInst').textContent = P(d.instrument);
-  document.getElementById('hContract').textContent = P(d.contract_month);
-  const hSess = document.getElementById('hSess');
-  hSess.textContent = P(d.session);
-  hSess.className = 'sess-badge ' + sessClass(d.session);
-  document.getElementById('hPrice').textContent = fmt(d.current_price);
-  document.getElementById('hTime').textContent = (d.date || '') + (d.time_cst ? '  ' + d.time_cst + ' CST' : '');
-
-  /* decision bar */
-  const dec = (d.scoring && d.scoring.decision) || 'WAIT';
-  const pill = document.getElementById('decPill');
-  pill.textContent = dec;
-  pill.className = 'dec-pill ' + (dec === 'EXECUTE' ? 'd-execute' : dec === 'SKIP' ? 'd-skip' : 'd-wait');
-  const ov = d.scoring && d.scoring.overall;
-  const scoreEl = document.getElementById('decScore');
-  scoreEl.textContent = ov != null ? ov + '/10' : '—';
-  scoreEl.style.color = cc(ov || 0);
-  document.getElementById('decNarrative').textContent = P(d.narrative);
-
-  /* risk flags */
-  const flags = document.getElementById('decFlags');
-  flags.innerHTML = '';
-  const r4h = (d.rsi || []).find(r => r.tf === '4H');
-  if (r4h && r4h.flag === 'NO_LONGS') flags.innerHTML += '<div class="rflag rf-stop">NO LONGS</div>';
-  else if (r4h && r4h.flag === 'NO_SHORTS') flags.innerHTML += '<div class="rflag rf-stop">NO SHORTS</div>';
-  else if (r4h && r4h.flag === 'REDUCE_SIZE') flags.innerHTML += '<div class="rflag rf-warn">REDUCE SIZE</div>';
-  if (d.risk && d.risk.size_adjustment === 'Skip') flags.innerHTML += '<div class="rflag rf-stop">SKIP SESSION</div>';
-  if (d.volatility && d.volatility.atr_state === 'Extreme') flags.innerHTML += '<div class="rflag rf-warn">EXTREME VOL</div>';
-  if (d.news_events && d.news_events.some(e => e.impact && e.impact.toLowerCase() === 'high' && !e.passed)) {
-    flags.innerHTML += '<div class="rflag rf-warn">HIGH-IMPACT NEWS</div>';
-  }
-
-  /* news strip */
-  buildNewsStrip(d.news_events || []);
-  buildNewsPanel(d);
-
-  /* regime */
-  const rc = document.getElementById('regCard');
-  rc.className = 'regime-card ' + regClass(d.regime && d.regime.name);
-  const changed = d.regime && d.regime.regime_change;
-  const prior = d.regime && d.regime.prior_regime;
-  document.getElementById('regName').innerHTML = P(d.regime && d.regime.name) +
-    (changed && prior ? `<span class="regime-change">was ${prior}</span>` : '');
-  const conf = d.regime && d.regime.confidence;
-  document.getElementById('confFill').style.width = conf != null ? (conf * 10) + '%' : '0';
-  document.getElementById('confFill').style.background = cc(conf || 0);
-  document.getElementById('confNum').textContent = conf != null ? conf + '/10' : '—';
-  document.getElementById('confNum').style.color = cc(conf || 0);
-  document.getElementById('regReason').textContent = P(d.regime && d.regime.reasoning);
-
-  /* macro */
-  const mac = d.macro;
-  const macEl = document.getElementById('macroInner');
-  if (mac) {
-    const tc = mac.tone === 'Risk-On' ? 'mt-on' : mac.tone === 'Risk-Off' ? 'mt-off' : 'mt-mixed';
-    const gc = mac.gold === 'Up' ? 'var(--bull)' : mac.gold === 'Down' ? 'var(--bear)' : 'var(--t2)';
-    const bc = mac.bonds === 'Yields Up' ? 'var(--bear)' : mac.bonds === 'Yields Down' ? 'var(--bull)' : 'var(--t2)';
-    macEl.innerHTML = `
-      <div class="tone-chip ${tc}">${mac.tone || '—'}</div>
-      <div class="mac-row"><span class="mac-k">US Indices</span><span class="mac-v">${P(mac.us_indices)}</span></div>
-      <div class="mac-row"><span class="mac-k">Leading</span><span class="mac-v" style="color:var(--bull)">${P(mac.sector_lead)}</span></div>
-      <div class="mac-row"><span class="mac-k">Lagging</span><span class="mac-v" style="color:var(--bear)">${P(mac.sector_lag)}</span></div>
-      <div class="mac-row"><span class="mac-k">Gold</span><span class="mac-v" style="color:${gc}">${P(mac.gold)}</span></div>
-      <div class="mac-row"><span class="mac-k">Bonds</span><span class="mac-v" style="color:${bc}">${P(mac.bonds)}</span></div>
-      ${mac.note ? `<div class="mac-note">${mac.note}</div>` : ''}`;
-  } else {
-    macEl.innerHTML = '<div class="null-txt">No macro — run /analyze with Live Chart 2</div>';
-  }
-
-  /* ema stack */
-  const emaTbody = document.getElementById('emaTbody');
-  emaTbody.innerHTML = '';
-  (d.ema_stack || []).forEach(e => {
-    const rc2 = e.bias === 'Bull' ? 'row-bull' : e.bias === 'Bear' ? 'row-bear' : '';
-    const tc2 = e.bias === 'Bull' ? 'bt-bull' : e.bias === 'Bear' ? 'bt-bear' : 'bt-n';
-    emaTbody.innerHTML += `<tr class="${rc2}">
-      <td style="color:var(--t3)">${e.tf}</td>
-      <td>${fmt(e.ema9)}</td><td>${fmt(e.ema21)}</td>
-      <td><span class="bias-tag ${tc2}">${P(e.bias)}</span></td>
-    </tr>`;
-  });
-
-  /* rsi */
-  const rsiRow = document.getElementById('rsiRow');
-  rsiRow.innerHTML = '';
-  (d.rsi || []).forEach(r => {
-    rsiRow.innerHTML += `<div class="rsi-blk">
-      <div class="rsi-tf">${r.tf}</div>
-      <div class="rsi-num" style="color:${rsiColor(r.value)}">${fmtF(r.value)}</div>
-      <div class="rsi-zone">${P(r.zone)}</div>
-      ${r.flag ? `<div class="rsi-flag">${r.flag}</div>` : ''}
-    </div>`;
-  });
-
-  /* vol */
-  const atr = d.volatility || {};
-  const stCls = 'vs-' + (atr.atr_state || 'normal').toLowerCase();
-  document.getElementById('volRow').innerHTML = `
-    <div class="vol-chip"><div class="vc-lbl">ATR 15m</div><div class="vc-v mono">${fmt(atr.atr_15m)}</div></div>
-    <div class="vol-chip"><div class="vc-lbl">State</div><div class="vc-v mono ${stCls}">${P(atr.atr_state)}</div></div>
-    <div class="vol-chip"><div class="vc-lbl">Squeeze</div><div class="vc-v mono" style="color:${atr.squeeze ? 'var(--warn)' : 'var(--bull)'}">${atr.squeeze ? 'YES' : 'NO'}</div></div>`;
-
-  /* vwap */
-  const vw = d.vwap || {};
-  const vwc = vw.signal === 'Bullish' ? 'var(--bull)' : vw.signal === 'Bearish' ? 'var(--bear)' : 'var(--t2)';
-  document.getElementById('vwapCol').innerHTML = `
-    <div class="ctitle" style="margin-bottom:5px"><div class="ct-dot"></div>VWAP</div>
-    <div class="vp-row"><span class="vp-lbl">Price</span><span class="vp-price mono">${fmt(vw.price)}</span></div>
-    <div class="vp-row"><span class="vp-lbl">Position</span><span class="vp-price mono" style="color:${vwc}">${P(vw.price_vs_vwap)}</span></div>
-    <div class="vp-row" style="border:none"><span class="vp-lbl">Signal</span><span class="vp-price" style="color:${vwc};font-weight:600">${P(vw.signal)}</span></div>`;
-
-  /* vol profile */
-  const vp = d.volume_profile || {};
-  const vpc = vp.price_in_profile === 'Above VAH' ? 'var(--bull)' : vp.price_in_profile === 'Below VAL' ? 'var(--bear)' : 'var(--acc)';
-  document.getElementById('vpCol').innerHTML = `
-    <div class="ctitle" style="margin-bottom:5px"><div class="ct-dot"></div>Vol Profile</div>
-    <div class="vp-row"><span class="vp-lbl">VAH</span><span class="vp-price mono" style="color:var(--bull)">${fmt(vp.vah)}</span></div>
-    <div class="vp-row"><span class="vp-lbl">POC</span><span class="vp-price mono" style="color:var(--acc)">${fmt(vp.poc)}</span></div>
-    <div class="vp-row"><span class="vp-lbl">VAL</span><span class="vp-price mono" style="color:var(--bear)">${fmt(vp.val)}</span></div>
-    <div class="vp-row" style="border:none"><span class="vp-lbl">Zone</span><span style="font-size:9.5px;font-weight:600;color:${vpc}">${P(vp.price_in_profile)}</span></div>`;
-
-  /* levels */
-  const lev = d.levels || {};
-  const levGrid = document.getElementById('levelsGrid');
-  const levItems = [
-    ['PDH', lev.pdh, ''], ['PDL', lev.pdl, ''],
-    ['PDC', lev.pdc, ''], ['ONH', lev.onh, ''],
-    ['ONL', lev.onl, ''], ['Wk Hi', lev.weekly_high, ''],
-    ['Wk Lo', lev.weekly_low, ''], ['Rnd ↑', lev.round_above, ''],
-    ['Rnd ↓', lev.round_below, ''],
-    [lev.sasuke_above_label || 'HTF ↑', lev.sasuke_above, 'lev-htf'],
-    [lev.sasuke_below_label || 'HTF ↓', lev.sasuke_below, 'lev-htf'],
-  ];
-  levGrid.innerHTML = levItems.filter(([, v]) => v != null && v !== 0)
-    .map(([l, v, cls]) => `<div class="lev-row ${cls}"><span class="lev-lbl">${l}</span><span class="lev-v mono">${fmt(v)}</span></div>`)
-    .join('');
-
-  /* opportunities */
-  const opps = d.opportunities || [];
-  const oppsInner = document.getElementById('oppsInner');
-  if (!opps.length) {
-    oppsInner.innerHTML = '<div class="null-txt">No setups — wait for regime + confluence alignment</div>';
-  } else {
-    oppsInner.innerHTML = opps.map(o => {
-      const isL = o.direction === 'LONG';
-      const dirCls = isL ? 'dp-long' : 'dp-short';
-      const convCls = o.conviction === 'HIGH' ? 'cb-high' : o.conviction === 'MEDIUM' ? 'cb-med' : 'cb-low';
-      const conf = o.confluence || {};
-      const checks = Object.entries(conf).map(([k, v]) =>
-        `<span class="cc ${v ? 'cc-ok' : 'cc-no'}">${v ? '✓' : '○'} ${k.replace(/_/g, ' ')}</span>`
-      ).join('');
-      return `<div class="opp-card ${isL ? 'long' : 'short'}">
-        <div class="opp-hdr">
-          <span class="dir-pill ${dirCls}">${P(o.direction)}</span>
-          <span class="conv-badge ${convCls}">${P(o.conviction)}</span>
-          <span style="flex:1"></span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--t3)">${o.id || ''}</span>
-        </div>
-        <div class="opp-trigger">${P(o.entry_trigger)}</div>
-        <div class="lvl-strip">
-          <div class="ls-it ls-entry"><div class="ls-lbl">Entry</div><div class="ls-v">${fmt(o.entry_price)}</div></div>
-          <div class="ls-it ls-stop"><div class="ls-lbl">Stop</div><div class="ls-v">${fmt(o.stop)}</div></div>
-          <div class="ls-it ls-t1"><div class="ls-lbl">T1</div><div class="ls-v">${fmt(o.t1)}</div></div>
-          <div class="ls-it ls-t2"><div class="ls-lbl">T2</div><div class="ls-v">${fmt(o.t2)}</div></div>
-          <div class="ls-it ls-rr"><div class="ls-lbl">R:R</div><div class="ls-v">${P(o.rr_t1)}</div></div>
-        </div>
-        <div class="conf-checks">${checks}</div>
-        ${o.notes ? `<div class="opp-notes">${o.notes}</div>` : ''}
-      </div>`;
-    }).join('');
-  }
-
-  /* scenarios */
-  const sc = d.scenarios || {};
-  document.getElementById('scenGrid').innerHTML = `
-    <div class="scen scen-bull">
-      <div class="scen-hdr"><span class="sn sn-bull">Bull</span><span class="sp sp-bull mono">${P(sc.bull_probability)}%</span></div>
-      <div class="scen-bar" style="background:var(--bull);width:${sc.bull_probability || 0}%"></div>
-      <div class="scen-line"><span class="sl-k">Trigger</span><span class="sl-v">${P(sc.bull_trigger)}</span></div>
-      <div class="scen-line" style="border:none"><span class="sl-k">Target</span><span class="sl-v">${P(sc.bull_target)}</span></div>
     </div>
-    <div class="scen scen-bear">
-      <div class="scen-hdr"><span class="sn sn-bear">Bear</span><span class="sp sp-bear mono">${P(sc.bear_probability)}%</span></div>
-      <div class="scen-bar" style="background:var(--bear);width:${sc.bear_probability || 0}%"></div>
-      <div class="scen-line"><span class="sl-k">Trigger</span><span class="sl-v">${P(sc.bear_trigger)}</span></div>
-      <div class="scen-line" style="border:none"><span class="sl-k">Target</span><span class="sl-v">${P(sc.bear_target)}</span></div>
+
+    <div>
+      <div class="bias-block">
+        <div class="bias-title">⚠ Bear Case / Risks</div>
+        <div class="bias-text">1H RSI at 78.26 and 4H RSI at 72.7 — both in overbought territory. Price is ~296 pts above 1H EMA(21) — stretched. NQ approaching month high resistance at 25,969. On 15m, price is actually below both short-term EMAs suggesting near-term exhaustion. Energy sector collapsing (-7.86% oil) may signal macro concern. Elevated bond yields (10Y 4.30%, 30Y 4.90%) remain a headwind.</div>
+      </div>
     </div>
-    <div class="scen scen-chop">
-      <div class="scen-hdr"><span class="sn sn-chop">Chop</span><span class="sp sp-chop mono">${P(sc.chop_probability)}%</span></div>
-      <div class="scen-bar" style="background:var(--t3);width:${sc.chop_probability || 0}%"></div>
-      <div class="scen-line" style="border:none"><span class="sl-k">Trigger</span><span class="sl-v">${P(sc.chop_trigger)}</span></div>
-    </div>`;
-  if (sc.invalidation) {
-    document.getElementById('invBlock').innerHTML = `<div class="inv-block"><strong>Invalidation:</strong> ${sc.invalidation}</div>`;
-  }
 
-  /* big trades */
-  const bts = d.bt_signals || [];
-  const btEl = document.getElementById('btInner');
-  btEl.innerHTML = bts.length ? bts.map(b => {
-    const isB = b.direction === 'Buy';
-    return `<div class="bt-item">
-      <div class="bt-dot ${isB ? 'buy' : 'sell'}"></div>
-      <div class="bt-price mono">${fmt(b.level)}</div>
-      <div class="bt-note">${P(b.note)}</div>
-      <div class="bt-sz">${b.size ? b.size + 'ct' : ''}</div>
-    </div>`;
-  }).join('') : '<div class="null-txt">No signals visible on chart</div>';
+    <div>
+      <div class="bias-block">
+        <div class="bias-title">🎯 Key Scenarios to Watch</div>
+        <div class="bias-text">Break and hold above 25,969.25 (month high) = further upside toward 26,000+. Rejection at 25,969 with RSI divergence = possible pullback to 25,600–25,750 support zone. 15m consolidation resolution: break up = continuation; break below 25,800 = caution. Watch Energy sector — oil weakness could drag broader market if sustained.</div>
+      </div>
+    </div>
 
-  /* scoring */
-  const sc2 = d.scoring || {};
-  const scoreItems = [['Regime', sc2.regime], ['Confluence', sc2.confluence], ['Risk/Reward', sc2.rr], ['Timing', sc2.timing], ['Macro', sc2.macro]];
-  document.getElementById('scoreGrid').innerHTML = scoreItems.map(([l, v]) => `
-    <div class="score-it">
-      <div class="si-lbl">${l}</div>
-      <div class="si-bar-bg"><div class="si-bar" style="width:${v != null ? v * 10 : 0}%;background:${cc(v || 0)}"></div></div>
-      <div class="si-v mono" style="color:${cc(v || 0)}">${v != null ? v + '/10' : '—'}</div>
-    </div>`).join('');
+  </div>
 
-  /* risk strip */
-  const rk = d.risk || {};
-  const szc = rk.size_adjustment === 'Full' ? 'rk-full' : rk.size_adjustment === 'Skip' ? 'rk-skip' : 'rk-half';
-  document.getElementById('riskStrip').innerHTML = `
-    <div class="rk-chip"><div class="rk-lbl">Size</div><div class="rk-v mono ${szc}">${P(rk.size_adjustment)}</div></div>
-    <div class="rk-chip"><div class="rk-lbl">Session</div><div class="rk-v mono" style="font-size:10px">${P(rk.session_window)}</div></div>
-    ${rk.rsi_4h_flag ? `<div class="rk-chip"><div class="rk-lbl">4H RSI</div><div class="rk-v mono" style="color:var(--warn);font-size:10px">${rk.rsi_4h_flag}</div></div>` : ''}`;
+  <hr class="divider" style="margin:14px 0;">
+  <div class="card-title" style="margin-bottom:10px;">Actionable Observations</div>
+  <ul class="bullets">
+    <li>NQ is testing month high at 25,969.25 — the 52-pt gap to resistance is the key near-term battleground</li>
+    <li>All 4 timeframes aligned bullish on structure, but short-term (15m) shows EMA compression and consolidation — classic pre-move setup</li>
+    <li>IWM outperforming (+1.42%) signals broad risk appetite, not just mega-cap rotation — healthy breadth</li>
+    <li>Dollar weakness (DXY -0.47%) is supportive of equities and gold; gold +1.99% to $4,602 confirms macro uncertainty bid</li>
+    <li>Oil -7.86% is the outlier — energy sector (-2.62%) is the only significant red sector; watch for contagion vs. isolated move</li>
+    <li>Correlation matrix shows near-perfect index co-movement (0.958–0.990) — this is a systematic macro move, not stock-picking environment</li>
+    <li>TSLA +3.16%, AMZN +3.98%, GOOG +3.11% — mega-cap growth leading; AAPL -0.17% and JPM -0.54% are notable laggards worth monitoring</li>
+  </ul>
+</div>
 
-  /* chart */
-  const img = d.meta && d.meta.chart_image;
-  const cw = document.getElementById('chartWrap');
-  if (img) {
-    cw.innerHTML = `<img src="${img}?t=${Date.now()}" alt="Live Chart" onerror="this.parentElement.innerHTML='<div class=chart-ph>Chart not found — place Live Chart.png in assets/</div>'">`;
-  }
+<div style="margin-top:16px;text-align:center;font-size:10px;color:var(--muted);">
+  Market Analysis Dashboard · ENQH26 · April 14, 2026 · Data sourced from live session screenshots · For informational purposes only
+</div>
 
-  document.getElementById('loader').classList.add('gone');
-}
-
-/* ── context chain loader ── */
-async function loadContext() {
-  try {
-    const res = await fetch('./context.json?t=' + Date.now());
-    const ctx = await res.json();
-    if (!ctx.active_thesis && (!ctx.watch_list || !ctx.watch_list.length)) return;
-    document.getElementById('ctxCard').style.display = '';
-    if (ctx.active_thesis) {
-      document.getElementById('thesisEl').innerHTML = `<div class="thesis-blk">${ctx.active_thesis}</div>`;
-    }
-    const items = (ctx.watch_list || []).filter(Boolean);
-    if (items.length) {
-      document.getElementById('watchEl').innerHTML = items.map(w =>
-        `<div class="watch-it"><div class="watch-dot"></div><div class="watch-txt">${w}</div></div>`
-      ).join('');
-    }
-  } catch (e) { /* first run */ }
-}
-
-/* ── main fetch ── */
-async function loadData() {
-  try {
-    await loadContext();
-    const res = await fetch('./data.json?t=' + Date.now());
-    if (!res.ok) throw new Error('data.json not found');
-    const d = await res.json();
-    render(d);
-  } catch (e) {
-    document.getElementById('loader').classList.add('gone');
-    document.getElementById('decNarrative').textContent = 'No data.json found — run /analyze command to generate.';
-    console.error(e);
-  }
-}
-
-loadData();
-setInterval(loadData, 60000);
-</script>
 </body>
 </html>
