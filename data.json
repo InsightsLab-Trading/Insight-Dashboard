@@ -1,94 +1,61 @@
 {
   "meta": {
     "version": "1.2",
-    "generated_at": "2026-04-13T10:30:00-05:00",
+    "generated_at": null,
     "chart_image": "./assets/chart.png"
   },
-  "instrument": "ENQM26",
-  "contract_month": "Jun 2026",
-  "date": "2026-04-13",
-  "time_cst": "10:30",
-  "session": "Morning",
-  "current_price": 25585.50,
-  "ema_stack": [
-    {
-      "tf": "15m",
-      "ema9": 25594,
-      "ema21": 25567,
-      "position": "Above Both",
-      "bias": "Bull"
-    },
-    {
-      "tf": "1H",
-      "ema9": 25530,
-      "ema21": 25565,
-      "position": "Above Both",
-      "bias": "Bull"
-    },
-    {
-      "tf": "4H",
-      "ema9": 25655,
-      "ema21": 25712,
-      "position": "Below Both",
-      "bias": "Bear"
-    },
-    {
-      "tf": "1D",
-      "ema9": 25730,
-      "ema21": 25882,
-      "position": "Below Both",
-      "bias": "Bear"
-    }
-  ],
-  "rsi": [
-    { "tf": "15m", "value": 46, "flag": null },
-    { "tf": "1H",  "value": 43, "flag": null },
-    { "tf": "4H",  "value": 42, "flag": null }
-  ],
+  "instrument": null,
+  "contract_month": null,
+  "date": null,
+  "time_cst": null,
+  "session": null,
+  "current_price": null,
+  "ema_stack": [],
+  "rsi": [],
   "volatility": {
-    "atr_15m": 45,
-    "atr_percentile": 52,
-    "atr_state": "Normal"
+    "atr_15m": null,
+    "atr_percentile": null,
+    "atr_state": null
   },
   "regime": {
-    "name": "BEAR_TREND",
-    "confidence": 6,
-    "reasoning": "Price sits 1,175 pts below the yearly open (26,761) and below both 4H and 1D EMA clusters; short-term 15m/1H momentum is recovering above quarterly open (25,472) but intermediate structure remains bearish with no reclaim of the 4H EMA."
+    "name": null,
+    "confidence": null,
+    "reasoning": null
   },
   "fideo": {
-    "day_type": "Normal Variation Day",
-    "overnight_range": "Normal",
-    "economic_event": false,
-    "ib_breakout_watch": true,
-    "playbook_note": "Monday open after prior week decline; start with range positioning near IB extremes; watch for IB breakout signal in power hour for directional conviction."
+    "day_type": null,
+    "overnight_range": null,
+    "economic_event": null,
+    "ib_breakout_watch": null,
+    "playbook_note": null
   },
   "bt_signals": [],
   "vwap": {
-    "price": 25520,
-    "price_vs_vwap": "Above",
-    "ma9_vs_vwap": "Above",
-    "signal": "Bullish"
+    "price": null,
+    "price_vs_vwap": null,
+    "ma9_vs_vwap": null,
+    "signal": null
   },
   "volume_profile": {
-    "poc": 25510,
-    "vah": 25700,
-    "val": 25360,
-    "hvn_zones": [25510, 25618],
-    "lvn_zones": [25445, 25672],
-    "price_in_profile": "In Range"
+    "poc": null,
+    "vah": null,
+    "val": null,
+    "hvn_zones": [],
+    "lvn_zones": [],
+    "price_in_profile": null
   },
   "levels": {
-    "pdh": 25850,
-    "pdl": 25205,
-    "pdc": 25450,
-    "onh": 25642,
-    "onl": 25418,
-    "weekly_high": 25855,
-    "weekly_low": 24910,
-    "monthly_high": 26060,
-    "monthly_low": 24875,
-    "round_above": 25750,
-    "round_below": 25500
+    "pdh": null,
+    "pdl": null,
+    "pdc": null,
+    "onh": null,
+    "onl": null,
+    "weekly_high": null,
+    "weekly_low": null,
+    "monthly_high": null,
+    "monthly_low": null,
+    "round_above": null,
+    "round_below": null
   },
   "sasuke": {
     "yearly_nq": 26761,
@@ -96,186 +63,94 @@
     "quarterly_nq": 25472,
     "monthly_nq": 19893,
     "weekly_nq": 20184,
-    "nearest_above": 26761,
-    "nearest_above_label": "Yearly Open",
-    "pts_above": 1175.5,
-    "nearest_below": 25472,
-    "nearest_below_label": "Quarterly Open (Q2 2026)",
-    "pts_below": 113.5,
+    "nearest_above": null,
+    "nearest_above_label": null,
+    "pts_above": null,
+    "nearest_below": null,
+    "nearest_below_label": null,
+    "pts_below": null,
     "cluster_zone": null,
-    "active_note": "Price is only 113.5 pts above the quarterly open (25,472) — the most critical near-term Sasuke level. A sustained hold above keeps the bounce thesis alive; a 15m body close below 25,472 signals the next structural leg down toward 25,200–25,000. No cluster zones within 50 pts of current price. Yearly open (26,761) is 1,175 pts above — major overhead target if trend reverses."
+    "active_note": null
   },
-  "fvgs": [
-    {
-      "id": "fvg-1",
-      "direction": "Bearish",
-      "top": 25848,
-      "bottom": 25722,
-      "timeframe": "1H",
-      "status": "Open",
-      "origin_time": "Prior session",
-      "note": "Open 1H bearish FVG from prior session decline — overhead resistance on any rally; area where institutions distributed supply into the breakdown."
-    },
-    {
-      "id": "fvg-2",
-      "direction": "Bullish",
-      "top": 25560,
-      "bottom": 25492,
-      "timeframe": "15m",
-      "status": "Open",
-      "origin_time": "08:30",
-      "note": "Morning session bullish FVG from RTH open recovery candle — support on pullbacks; aligned with quarterly open support zone and session VWAP."
-    }
-  ],
+  "fvgs": [],
   "liquidity": {
-    "t1_pools": "Prior day high (25,850) — buy-side liquidity above; prior day low (25,205) — sell-side liquidity below. These are Tier 1 targets for institutional sweeps.",
-    "t2_pools": "Overnight high (25,642) and weekly high (25,855) above; overnight low (25,418) and weekly low (24,910) below.",
-    "sweep_watch": "25,472 (quarterly open) — if swept and reverses, strong long signal; if price breaks and holds below, triggers structural leg to PDL (25,205).",
-    "dominant_side": "Sell-side"
+    "t1_pools": null,
+    "t2_pools": null,
+    "sweep_watch": null,
+    "dominant_side": null
   },
-  "narrative": "NQ is recovering from a significant multi-day decline, trading at 25,585.50 — only 113.5 pts above the critical quarterly open support at 25,472. Short-term momentum on 15m and 1H has turned bullish as price bounced off recent lows and reclaimed VWAP, but the 4H and daily structure remains firmly bearish with price sitting well below the 4H EMA cluster (25,655–25,712). Institutions appear to be selling into this morning recovery while buyers attempt to stabilize above the quarterly open — a contested zone with high directional significance.",
-  "dominant_player_action": "Sellers are distributing into the morning recovery rally, maintaining overhead pressure at the 4H EMA cluster (25,655–25,712); buyers are defending the quarterly open (25,472) as a near-term floor but lack the Big Trades confirmation to force a sustained regime change.",
-  "intraday_context": "Monday morning session showing a recovery from what appears to be a prior week selloff; price is above VWAP with 15m/1H EMA bias bullish — the key question is whether this is a dead-cat bounce or a genuine reversal attempt at the quarterly open.",
+  "narrative": null,
+  "dominant_player_action": null,
+  "intraday_context": null,
   "risk": {
-    "equity": 50000,
-    "dd_floor": 48000,
-    "max_risk_per_trade": 500,
-    "current_time_cst": "10:30",
-    "session_window": "Morning",
-    "losing_streak": 0,
-    "size_adjustment": "Full",
+    "equity": null,
+    "dd_floor": null,
+    "max_risk_per_trade": null,
+    "current_time_cst": null,
+    "session_window": null,
+    "losing_streak": null,
+    "size_adjustment": null,
     "rsi_4h_flag": null
   },
   "scenarios": {
-    "bull_probability": 38,
-    "bear_probability": 42,
-    "chop_probability": 20,
-    "bull_trigger": "Sustained 15m body close above 25,620 with Big Trades green confirmation; reclaim of 4H EMA (25,655) signals potential regime shift to CHOP/BULL_TREND",
-    "bear_trigger": "15m body close below 25,472 (quarterly open breakdown); confirms next structural leg lower toward PDL (25,205)",
-    "chop_trigger": "Price oscillates between 25,450–25,650 with no decisive closes beyond these levels for 3+ consecutive 1H bars",
-    "bull_target": "25,700 VAH → 25,850 PDH → 26,000 round number",
-    "bear_target": "25,360 VAL → 25,205 PDL → 25,000 round number",
-    "invalidation": "Bull thesis invalidated by 1H close below 25,400; bear thesis invalidated by 4H close above 25,750 (above 4H EMA stack + VAH)"
+    "bull_probability": null,
+    "bear_probability": null,
+    "chop_probability": null,
+    "bull_trigger": null,
+    "bear_trigger": null,
+    "chop_trigger": null,
+    "bull_target": null,
+    "bear_target": null,
+    "invalidation": null
   },
-  "opportunities": [
-    {
-      "id": "opp-1",
-      "direction": "LONG",
-      "conviction": "MEDIUM",
-      "entry_trigger": "Pullback to 25,500–25,515 (VWAP + bullish FVG zone), followed by 15m body close bullish with EMA9 holding as dynamic support",
-      "entry_price": 25508,
-      "stop": 25430,
-      "t1": 25628,
-      "t2": 25720,
-      "t3": 25850,
-      "rr_t1": "1:1.5",
-      "rr_t2": "1:2.7",
-      "confluence_stack": {
-        "regime_aligned": false,
-        "ema_aligned": true,
-        "rsi_valid": true,
-        "bt_confirmed": false,
-        "sasuke_level": true,
-        "fvg_present": true,
-        "vp_confluence": true,
-        "vwap_aligned": true
-      },
-      "confluence_detail": {
-        "regime_aligned": "Counter-trend long vs BEAR_TREND regime — reduces conviction; requires extra confirmation before entry",
-        "ema_aligned": "15m and 1H EMA stacks bullish; EMA9 acting as dynamic support for pullback entry",
-        "rsi_valid": "RSI 46 (15m) / 43 (1H) — neutral zone, no overbought flags, room to run to T2",
-        "bt_confirmed": "No Big Trades clearly visible in chart — need green circle on pullback test for max conviction",
-        "sasuke_level": "Quarterly open (25,472) provides structural support 38 pts below the stop — reinforces the floor",
-        "fvg_present": "Morning bullish FVG (25,492–25,560) directly aligns with entry zone",
-        "vp_confluence": "Entry near session VWAP and POC (25,510) = maximum volume-weighted support cluster",
-        "vwap_aligned": "Price and MA9 both above VWAP — intraday bull bias confirmed per Brendan playbook"
-      },
-      "playbook_refs": "Sasuke (quarterly open support zone), Brendan VWAP/MA9 (bullish alignment), 44 StdDev (oversold bounce continuation), Power Hour (bullish prep if holds through dead zone)",
-      "notes": "Counter-trend long requiring pullback entry for acceptable R:R; invalidated on any 15m body close below 25,430; do NOT chase if price surges above 25,620 without pullback"
-    },
-    {
-      "id": "opp-2",
-      "direction": "SHORT",
-      "conviction": "MEDIUM",
-      "entry_trigger": "15m body close below 25,472 (quarterly open breakdown); enter at close of breakdown candle, Big Trades red circle confirmation preferred",
-      "entry_price": 25455,
-      "stop": 25590,
-      "t1": 25318,
-      "t2": 25205,
-      "t3": 25000,
-      "rr_t1": "1:1.0",
-      "rr_t2": "1:1.9",
-      "confluence_stack": {
-        "regime_aligned": true,
-        "ema_aligned": true,
-        "rsi_valid": true,
-        "bt_confirmed": false,
-        "sasuke_level": true,
-        "fvg_present": true,
-        "vp_confluence": true,
-        "vwap_aligned": false
-      },
-      "confluence_detail": {
-        "regime_aligned": "BEAR_TREND regime — short is fully with-trend; highest-quality setups align with dominant regime",
-        "ema_aligned": "4H and 1D EMA stacks bearish; quarterly open breakdown confirms resumption of intermediate trend",
-        "rsi_valid": "4H RSI at 42 — not oversold, no mean-revert risk; room to fall further without reversal concern",
-        "bt_confirmed": "Needs Big Trades red circle at quarterly open test — not yet triggered, wait for it",
-        "sasuke_level": "Quarterly open (25,472) breakdown = key structural failure; Sasuke playbook activates short on close below",
-        "fvg_present": "Overhead bearish FVG (25,722–25,848) confirms persistent supply from prior distribution phase",
-        "vp_confluence": "Break below session POC (25,510) and into VAL zone (25,360) = bearish extension territory per VP rules",
-        "vwap_aligned": "Breakdown would push price below VWAP (25,520) — confirms intraday bias shift to bearish"
-      },
-      "playbook_refs": "Sasuke (quarterly open failure = structural short), Rich Wyckoff (markdown LPSY continuation), BEAR_TREND regime alignment, Power Hour (if setup extends to 2:00 PM window)",
-      "notes": "With-trend short on quarterly open breakdown; T1 R:R is 1:1 (take as first partial), T2 at PDL is 1:1.9; stop above current swing area at 25,590; requires patience for the trigger to develop"
-    }
-  ],
+  "opportunities": [],
   "scoring": {
-    "regime": 6,
-    "confluence": 6,
-    "rr": 7,
-    "timing": 7,
-    "macro": 7,
-    "overall": 7,
-    "decision": "WAIT"
+    "regime": null,
+    "confluence": null,
+    "rr": null,
+    "timing": null,
+    "macro": null,
+    "overall": null,
+    "decision": null
   },
   "playbooks": {
     "stddev": {
-      "is_active": false,
+      "is_active": null,
       "zone": null,
-      "signal": "Watch",
-      "target": "50–75 pts from -2/-2.5 extension if HOD/LOD break triggers a new draw",
-      "note": "No active StdDev draw triggered yet; watching for HOD or LOD break to anchor new Fib extensions; quarterly open (25,472) is a natural anchor — if broken, draw from 25,472 swing down to find -2/-2.5 reversal zone near 25,200"
+      "signal": null,
+      "target": null,
+      "note": null
     },
     "wyckoff": {
-      "is_active": true,
-      "phase": "Markdown / LPSY",
-      "structure": "SOW/LPSY",
-      "fib_entry": 25720,
-      "extension_target": 25200,
-      "note": "Market in markdown phase from distribution at higher levels; current bounce to 25,585 may represent an LPSY (last point of supply) — Rich's Fib .618 of recent swing near 25,720 is the optimal short entry; -0.5 extension targets the 25,200 PDL zone"
+      "is_active": null,
+      "phase": null,
+      "structure": null,
+      "fib_entry": null,
+      "extension_target": null,
+      "note": null
     },
     "brendan": {
-      "is_active": true,
-      "ma9_vs_vwap": "Above",
-      "gap_width": "Tight",
-      "gc_nq_primary": "NQ",
-      "correlation_signal": "Bullish",
-      "note": "MA9 above VWAP with tight spread = short-term trend-following mode bullish; NQ is primary market during RTH Monday; watch for MA9/VWAP bearish cross below 25,520 — would signal intraday bias shift to bearish and confirm short trigger alignment"
+      "is_active": null,
+      "ma9_vs_vwap": null,
+      "gap_width": null,
+      "gc_nq_primary": null,
+      "correlation_signal": null,
+      "note": null
     },
     "power_hour": {
-      "is_active": false,
-      "status": "Pre-PH",
-      "morning_trend": "Bull",
-      "squeeze_present": false,
-      "setup": "Wait",
-      "entry_bar": "No entry",
-      "note": "Power hour 3.5 hours away (2:00 PM CST); morning trend is bullish recovery; if dead zone (11:30–1:30) forms a squeeze between 25,450–25,620, high probability PH setup in the direction of morning trend; prepare bull setup template if price holds above 25,472 through dead zone"
+      "is_active": null,
+      "status": null,
+      "morning_trend": null,
+      "squeeze_present": null,
+      "setup": null,
+      "entry_bar": null,
+      "note": null
     }
   },
   "supporting": {
-    "vault_refs": "Fideo — 4 Trading Day Types, Sasuke — HTF Candle Open Levels, 44 — StdDev Fib Extension System, Rich — Wyckoff Distribution and Fib Entry, Brendan — VWAP MA9 Entry and NQ-GC Correlation, Power Hour Playbook, Pre-Market Checklist, Volume Profile — POC VAH VAL",
-    "active_playbooks": "Sasuke (quarterly open 25,472 as critical level), Wyckoff (markdown/LPSY monitoring, Fib short at 25,720), Brendan (VWAP/MA9 bullish above VWAP — watch for cross)",
-    "key_confluences": "1) Quarterly open (25,472) only 113.5 pts below — structural battleground level; 2) Price above VWAP with MA9 above VWAP — intraday bullish per Brendan playbook; 3) Mixed EMA stack (15m/1H bull vs 4H/1D bear) = contested transition zone requiring directional resolution",
-    "watch_for": "Big Trades signal on quarterly open test (green circle + hold = max conviction long; red circle + break = max conviction short); 4H EMA cluster (25,655–25,712) reclaim for regime upgrade; MA9/VWAP bearish cross below 25,520 for short confirmation; dead zone squeeze between 25,450–25,620 for Power Hour bull or bear setup"
+    "vault_refs": null,
+    "active_playbooks": null,
+    "key_confluences": null,
+    "watch_for": null
   }
 }
