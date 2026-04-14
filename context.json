@@ -1,10 +1,15 @@
 {
-  "last_updated": null,
-  "last_regime": null,
-  "last_decision": null,
-  "last_price": null,
-  "watch_list": [],
-  "active_thesis": null,
-  "invalidation_level": null,
-  "notes_for_next_run": null
+  "last_updated": "2026-04-14T09:30:00-05:00",
+  "last_regime": "BEAR_TREND_NORMAL_VOL_SELL_DOM",
+  "last_decision": "EXECUTE",
+  "last_price": 25726,
+  "watch_list": [
+    "25,726 PDH/ONH — key resistance, rejection confirmed. Watch for failed retest.",
+    "25,561 PDC — first target and support. Body close below flips to 25,472.",
+    "25,472 Quarterly Open — major Sasuke level, expect strong reaction.",
+    "FOMC Minutes 1:00 PM CST — exit all positions by 12:45 CST."
+  ],
+  "active_thesis": "Bearish bias — hot CPI rejection at PDH 25,726 with NO_LONGS RSI flag. Targeting PDC 25,561 then Qtr Open 25,472. Short-only session.",
+  "invalidation_level": "25,763 weekly high — body close above kills short thesis.",
+  "notes_for_next_run": "Regime change from CHOP to BEAR_TREND. Watch if next run shows price reclaiming VWAP — could mean CPI reaction fades. FOMC minutes could create HIGH_VOL regime. Check 4H RSI — if drops below 73 NO_LONGS flag clears."
 }

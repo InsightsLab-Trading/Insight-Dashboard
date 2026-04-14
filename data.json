@@ -1,84 +1,172 @@
 {
   "meta": {
-    "version": "2.0",
-    "generated_at": null,
+    "version": "2.1",
+    "generated_at": "2026-04-14T09:30:00-05:00",
     "chart_image": "./assets/chart.png"
   },
-  "instrument": null,
-  "contract_month": null,
-  "date": null,
-  "time_cst": null,
-  "session": null,
-  "current_price": null,
+  "instrument": "ENQM26",
+  "contract_month": "Jun 2026",
+  "date": "2026-04-14",
+  "time_cst": "09:30",
+  "session": "RTH Open",
+  "current_price": 25726,
   "macro": {
-    "tone": null,
-    "us_indices": null,
-    "sector_lead": null,
-    "sector_lag": null,
-    "gold": null,
-    "gold_nq_correlation": null,
-    "bonds": null,
-    "note": null
+    "tone": "Risk-Off",
+    "us_indices": "SPX -0.8% · NDX -1.1% · RUT -0.6%",
+    "sector_lead": "Utilities, Health Care",
+    "sector_lag": "Tech, Consumer Disc",
+    "gold": "Up",
+    "gold_nq_correlation": "Inverse (risk-off)",
+    "bonds": "Yields Down",
+    "note": "Tech sector lagging with gold bid — classic risk-off rotation. DXY elevated, NQ heavyweights under pressure."
   },
+  "news_summary": "CPI print this morning came in hotter than expected at +0.4% MoM vs +0.3% forecast. Markets pricing fewer Fed cuts. Watch for continued selling pressure into mid-session. FOMC minutes release at 1:00 PM CST is the next key catalyst.",
+  "news_events": [
+    {
+      "name": "CPI m/m",
+      "currency": "USD",
+      "time": "07:30",
+      "impact": "high",
+      "forecast": "0.3%",
+      "previous": "0.2%",
+      "actual": "0.4%",
+      "passed": true
+    },
+    {
+      "name": "Core CPI m/m",
+      "currency": "USD",
+      "time": "07:30",
+      "impact": "high",
+      "forecast": "0.3%",
+      "previous": "0.3%",
+      "actual": "0.4%",
+      "passed": true
+    },
+    {
+      "name": "FOMC Meeting Minutes",
+      "currency": "USD",
+      "time": "13:00",
+      "impact": "high",
+      "forecast": null,
+      "previous": null,
+      "actual": null,
+      "passed": false
+    },
+    {
+      "name": "30-Year Bond Auction",
+      "currency": "USD",
+      "time": "12:00",
+      "impact": "medium",
+      "forecast": null,
+      "previous": "4.63%",
+      "actual": null,
+      "passed": false
+    }
+  ],
   "regime": {
-    "name": null,
-    "confidence": null,
-    "reasoning": null,
-    "prior_regime": null,
-    "regime_change": false
+    "name": "BEAR_TREND_NORMAL_VOL_SELL_DOM",
+    "confidence": 8,
+    "reasoning": "Price below EMA9+21 on 15m and 1H, RSI trending down from 55 to 45, red BT circles on bounces. Hot CPI adds macro confirmation.",
+    "prior_regime": "CHOP_LOW_VOL",
+    "regime_change": true
   },
-  "ema_stack": [],
-  "rsi": [],
+  "ema_stack": [
+    { "tf": "15m", "ema9": 25667, "ema21": 25693, "position": "Below Both", "bias": "Bear" },
+    { "tf": "1H",  "ema9": 25646, "ema21": 25561, "position": "Below Both", "bias": "Bear" },
+    { "tf": "4H",  "ema9": 25516, "ema21": 25312, "position": "Above Both", "bias": "Bull" },
+    { "tf": "1D",  "ema9": 25037, "ema21": 24756, "position": "Above Both", "bias": "Bull" }
+  ],
+  "rsi": [
+    { "tf": "15m", "value": 65.9, "zone": "Neutral", "flag": null },
+    { "tf": "1H",  "value": 75.1, "zone": "Overbought", "flag": null },
+    { "tf": "4H",  "value": 75.9, "zone": "Overbought", "flag": "NO_LONGS" }
+  ],
   "volatility": {
-    "atr_15m": null,
-    "atr_state": null,
+    "atr_15m": 18.4,
+    "atr_state": "Normal",
     "squeeze": false
   },
   "vwap": {
-    "price": null,
-    "price_vs_vwap": null,
-    "signal": null
+    "price": 25667,
+    "price_vs_vwap": "Above",
+    "signal": "Bullish"
   },
   "volume_profile": {
-    "poc": null,
-    "vah": null,
-    "val": null,
-    "price_in_profile": null
+    "poc": 25451,
+    "vah": 25763,
+    "val": 25251,
+    "price_in_profile": "Above VAH"
   },
   "levels": {
-    "pdh": null, "pdl": null, "pdc": null,
-    "onh": null, "onl": null,
-    "weekly_high": null, "weekly_low": null,
-    "round_above": null, "round_below": null,
-    "sasuke_above": null, "sasuke_above_label": null, "sasuke_pts_above": null,
-    "sasuke_below": null, "sasuke_below_label": null, "sasuke_pts_below": null
+    "pdh": 25726,
+    "pdl": 25500,
+    "pdc": 25561,
+    "onh": 25730,
+    "onl": 25400,
+    "weekly_high": 25763,
+    "weekly_low": 24904,
+    "round_above": 25750,
+    "round_below": 25500,
+    "sasuke_above": 25726,
+    "sasuke_above_label": "PDH/ONH",
+    "sasuke_pts_above": 0,
+    "sasuke_below": 25472,
+    "sasuke_below_label": "Qtr Open",
+    "sasuke_pts_below": 254
   },
-  "bt_signals": [],
-  "narrative": null,
+  "bt_signals": [
+    { "direction": "Sell", "size": 180, "level": 25726, "note": "Rejection at PDH — price followed direction bearish" },
+    { "direction": "Buy",  "size": 155, "level": 25561, "note": "Absorption at PDC — price held, potential support" }
+  ],
+  "narrative": "Hot CPI triggered a risk-off flush at the open. Price is testing the prior day high as resistance — BT signals show institutional sellers active at 25,726. 4H RSI at 75.9 is a hard cap on new longs. Primary thesis: fade rip to PDH/ONH with target PDC 25,561 then quarterly open 25,472.",
   "scenarios": {
-    "bull_probability": null,
-    "bear_probability": null,
-    "chop_probability": null,
-    "bull_trigger": null,
-    "bear_trigger": null,
-    "chop_trigger": null,
-    "bull_target": null,
-    "bear_target": null,
-    "invalidation": null
+    "bull_probability": 25,
+    "bear_probability": 55,
+    "chop_probability": 20,
+    "bull_trigger": "15m body close above 25,763 (weekly high) with BT absorption",
+    "bear_trigger": "15m body close below 25,667 (VWAP) — already watching",
+    "chop_trigger": "Price oscillates 25,600–25,726, no conviction either side",
+    "bull_target": "25,800 → 26,000 round",
+    "bear_target": "25,561 (PDC) → 25,472 (Qtr Open)",
+    "invalidation": "15m body close above 25,763 with expanding volume kills short bias"
   },
-  "opportunities": [],
+  "opportunities": [
+    {
+      "id": "opp-1",
+      "direction": "SHORT",
+      "conviction": "HIGH",
+      "entry_trigger": "15m body close below VWAP 25,667 after rejection at PDH 25,726. Confirm red BT circle.",
+      "entry_price": 25660,
+      "stop": 25775,
+      "t1": 25561,
+      "t2": 25472,
+      "rr_t1": "1:0.9",
+      "rr_t2": "1:1.6",
+      "confluence": {
+        "regime_aligned": true,
+        "ema_aligned": true,
+        "rsi_valid": true,
+        "bt_confirmed": true,
+        "sasuke_level": true,
+        "vp_confluence": true,
+        "vwap_aligned": true,
+        "key_level": true
+      },
+      "notes": "4H RSI NO_LONGS flag active — only short entries valid. Size at 50% max per RSI override rule. FOMC minutes at 1PM CST — exit by 12:45 CST."
+    }
+  ],
   "scoring": {
-    "regime": null,
-    "confluence": null,
-    "rr": null,
-    "timing": null,
-    "macro": null,
-    "overall": null,
-    "decision": null
+    "regime": 8,
+    "confluence": 9,
+    "rr": 7,
+    "timing": 7,
+    "macro": 9,
+    "overall": 8.1,
+    "decision": "EXECUTE"
   },
   "risk": {
-    "size_adjustment": null,
-    "rsi_4h_flag": null,
-    "session_window": null
+    "size_adjustment": "50%",
+    "rsi_4h_flag": "NO_LONGS",
+    "session_window": "RTH Open — 100% window but RSI halves size"
   }
 }
